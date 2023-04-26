@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 //import { createContadorImagem } from '/services/country.service';
 import {createContadorImagem} from './services/country-services.ts';
+import { Player } from './classes/player.ts';
 /**
  * FirstGameScene is an example Phaser Scene
  * @class
@@ -34,6 +35,7 @@ export class FirstGameScene extends Phaser.Scene {
     }
 
     create() {
+        let player1 = new Player("Jogador 1", 3);
         console.log('FirstGameScene.create');
         // initialize variables
         let largura = window.screen.width;
@@ -41,10 +43,10 @@ export class FirstGameScene extends Phaser.Scene {
         let mapa = this.add.image(largura/2, altura/3, 'mapa');
         mapa.setScale(0.8);
 
-        createContadorImagem(this,485, 290);
-        createContadorImagem(this, 430, 290);
-        createContadorImagem(this, 430, 240);
-        createContadorImagem(this, 450, 340);
+        createContadorImagem(this,485, 290, player1);
+        createContadorImagem(this, 430, 290, player1);
+        createContadorImagem(this, 430, 240, player1);
+        createContadorImagem(this, 450, 340, player1);
         /*
         var brasil = this.add.image(485,290, 'circle')
         brasil.setScale(0.05,0.05)
