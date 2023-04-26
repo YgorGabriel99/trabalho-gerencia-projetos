@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "allowImportingTsExtensions": true,
     "target": "ESNext",
     "module": "ESNext",
     "lib": ["ESNext", "DOM", "scripthost"],
@@ -13,5 +14,5 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true
   },
-  "include": ["./src"]
+  "include": ["./src/**/*",]
 }
