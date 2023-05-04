@@ -1,18 +1,23 @@
 import Phaser from "phaser";
-import loadCountries, { TerritoryFactory } from './services/territory-factory'
+import { TerritoryFactory } from './services/territory-factory'
 import { WarMatch } from "./game/WarMatch";
 import { Turn } from "./game/Turn";
 import { GamePlayer } from "./model/GamePlayer";
 import { Territory } from "./model/Territory";
+import { Board } from "./game/Board";
 
-// const COLORS = {
-//     'black': 0x000000,
-//     'green': 0xff0000,
-//     'yellow': 0xe9ae02
-// }
+const COLORS = {
+    'black': 0x4f4f4d,
+    'green': 0x03a95e,
+    'yellow': 0xe9ae02,
+    'blue': 0x1a54a5,
+    'pink': 0xde2587,
+    'red': 0xec3829,
+}
+
 export class MainGameScene extends Phaser.Scene {
 
-    // public warMatch!: WarMatch;
+    public warMatch!: WarMatch;
     constructor() {
         super('MainGameScene');
     }
@@ -31,40 +36,66 @@ export class MainGameScene extends Phaser.Scene {
         this.load.json('territories', 'assets/data/territories.json');
         // console.log(territories)
         
-        // this.warMatch = new WarMatch(new Turn(2));
-        // this.warMatch.addPlayer(new GamePlayer({id: 1, name: "Paulo"},"black"))
-        // this.warMatch.addPlayer(new GamePlayer({id: 1, name: "Tiago"}, "green"))
-        // this.warMatch.addPlayer(new GamePlayer({id: 1, name: "Rafa"}, "yellow"))
+        
         
     }
     
     create(): void {
 
-        TerritoryFactory.loadCountries(this)
+        this.warMatch = new WarMatch(new Board(), new Turn(2));
+        this.warMatch.addPlayer(new GamePlayer({id: 1, name: "Paulo"},COLORS["black"]))
+        this.warMatch.addPlayer(new GamePlayer({id: 2, name: "Thalita"}, COLORS["red"]))
+        this.warMatch.addPlayer(new GamePlayer({id: 3, name: "Rafa"}, COLORS["yellow"]))
+        this.warMatch.addPlayer(new GamePlayer({id: 4, name: "Ygor"}, COLORS["green"]))
+        this.warMatch.addPlayer(new GamePlayer({id: 5, name: "Edu"}, COLORS["blue"]))
+        this.warMatch.addPlayer(new GamePlayer({id: 6, name: "Tiago"}, COLORS["pink"]))
 
-        this.input.on('gameobjectover', (pointer:Phaser.Input.Pointer, gameObject:Phaser.GameObjects.Sprite) =>
+        this.warMatch.board.setTerritories(TerritoryFactory.loadCountries(this))
+        
+        this.warMatch.shufflePlayerInBoard()
+        
+        this.warMatch.getPlayerTotalTerritories(this.warMatch.players[0])
+
+        this.warMatch.showPlayers(this)
+
+        this.input.on('gameobjectover', (pointer:Phaser.Input.Pointer, territory:Territory) =>
         {
-            gameObject.setAlpha(0.5);
-        });
-
-        this.input.on('gameobjectout', (pointer:Phaser.Input.Pointer, gameObject:Phaser.GameObjects.Sprite) =>
-        {
-            gameObject.clearAlpha();
-        });
-
-        this.input.on('gameobjectdown', (pointer:Phaser.Input.Pointer, territory:Territory) =>{
-            // territory.spriteTerritory.setTint(0xe9ae02)
-        })
-
-        this.input.on('gameobjectdown', (pointer:Phaser.Input.Pointer, territory:Territory) =>{
-            if (territory.isSelected){
-                territory.armies++
-                territory.armiesText.setText(territory.armies.toString())
-                territory.flash()
-            }else{
-                territory.highlight()
+            if(!this.warMatch.board.hasSelectedTerritory()){
+                territory.highlight();
             }
-            territory.changeSelected()
+        });
+
+        this.input.on('gameobjectout', (pointer:Phaser.Input.Pointer, territory:Territory) =>
+        {
+            if(!this.warMatch.board.hasSelectedTerritory()){
+                territory.updateTint();
+            }
+            
+        });
+
+        this.input.on('gameobjectdown', (pointer:Phaser.Input.Pointer, territory:Territory) =>{
+
+            if (!this.warMatch.board.hasSelectedTerritory()){
+                this.warMatch.board.clearBoard()
+                territory.select()
+                territory.highlightNeighbours(this.warMatch.board.territories);
+                return
+            }else if(territory.isSelected){
+                territory.unselect()
+                territory.unhighlightNeighbours(this.warMatch.board.territories);
+                return
+            }else if(territory.isHighlighted && this.warMatch.board.getSelected()){
+                const selectedTerritory = this.warMatch.board.getSelected()
+                if(territory.isNeighbour(selectedTerritory)){
+                    alert(`${selectedTerritory.owner?.name} está atacando com ${selectedTerritory.name} o território ${territory.name} de ${territory.owner?.name}`)
+                    selectedTerritory.attack(territory)
+                    return
+                }
+                console.log(territory.isNeighbour(selectedTerritory))
+                return
+            }else {
+                alert("Movimento inválido")
+            }
         })
 
     }

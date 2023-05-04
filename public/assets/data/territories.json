@@ -66,7 +66,7 @@
     {
         "id": 9,
         "name": "México",
-        "neighbors": [7,8],
+        "neighbors": [7,8,10],
         "continent": 1,
         "card": 3,
         "slug": "mexico"
@@ -90,7 +90,7 @@
     {
         "id": 12,
         "name": "Brasil",
-        "neighbors": [7,8],
+        "neighbors": [10,11,13],
         "continent": 1,
         "card": 3,
         "slug": "brasil"
@@ -98,7 +98,7 @@
     {
         "id": 13,
         "name": "Argentina",
-        "neighbors": [7,8],
+        "neighbors": [11,12],
         "continent": 1,
         "card": 3,
         "slug": "argentina"
