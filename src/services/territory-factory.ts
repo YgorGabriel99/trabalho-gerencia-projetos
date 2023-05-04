@@ -1,18 +1,30 @@
-export default function loadCountries(game: Phaser.Scene) {
-    const territorios = game.add.group();
-    const territoriosData = game.cache.json.get('frame').frames;
-    Object.keys(territoriosData).forEach(key => {
-        const data = territoriosData[key];
-        const sprite = game.add.sprite(0, 0, 'territorios', key).setOrigin(0, 0).setScale(0.5);
-        sprite.setData('army', 0);
-        sprite.setInteractive();
-        const text = game.add.text(0, 0, `${sprite.getData('army')}`, { font: '22px Arial' });
-        //vamos ter que mudar provavelmente aqui
-        sprite.on('pointerdown', () => {
-            sprite.setData('army', sprite.getData('army') + 1);
-            text.setText(`${sprite.getData('army')}`);
-        });
-        territorios.add(sprite);
+import { Territory } from "../model/Territory";
 
-    });
+export class TerritoryFactory{
+    static loadCountries(scene:Phaser.Scene){
+        const territorios = scene.add.group();
+    const territories = scene.cache.json.get('territories').territories
+    const territoriosData = scene.cache.json.get('frame').frames;
+    console.log(territories)
+    territories.forEach((territory: {
+        slug: any;
+        name: string; id: number; neighbors: number[]
+        }) => {
+            let territorio = new Territory(
+                {
+                    scene: scene,
+                    id: territory.id,
+                    x: 0, 
+                    y: 0,
+                    spriteSource: territoriosData[territory.slug].spriteSourceSize,
+                    neighbors: territory.neighbors,
+                    name: territory.name,
+                    slug: territory.slug    
+                }
+            )  
+            territorios.add(territorio);
+        });
+    }
+
+    
 }
