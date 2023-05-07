@@ -18,6 +18,20 @@ npm install
 
 `npm run serve` launches a server over the previous build.
 
+## Documentação
+
+Link para os documentos do trabalho https://drive.google.com/drive/folders/1ajHUBW5qeamOUQ7iCmvNG9FCyvijBVzM?usp=sharing
+
+## Integrantes
+
+Grupo:
+Eduardo da Motta Saldumbides,
+Thalita Alves Sant Ana,
+Ygor Gabriel de Freitas Ferreira,
+Tiago Rodrigues de Matos,
+Paulo Vitor Novaes Cardozo e
+Rafaela Peçanha Mathias Fernandes
+
 ## License
 
 [MIT](LICENSE).
