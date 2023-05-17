@@ -90,7 +90,7 @@
     {
         "id": 12,
         "name": "Brasil",
-        "neighbors": [10,11,13],
+        "neighbors": [10,11,13,14],
         "continent": 1,
         "card": 3,
         "slug": "brasil"
@@ -103,5 +103,4 @@
         "card": 3,
         "slug": "argentina"
     }
-
 ]}
