@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - name: Checkout repository
@@ -23,6 +23,6 @@ jobs:
     
     - name : Install Esbuild
       run: npm install esbuild
-      
+
     - name: Build and deploy
       run: npm run deploy
