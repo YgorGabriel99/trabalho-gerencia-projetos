@@ -44,11 +44,11 @@ export class MainGameScene extends Phaser.Scene {
 
         this.warMatch = new WarMatch(new Board(), new Turn(2));
         this.warMatch.addPlayer(new GamePlayer({id: 1, name: "Paulo"},COLORS["black"]))
-        // this.warMatch.addPlayer(new GamePlayer({id: 2, name: "Thalita"}, COLORS["red"]))
+        this.warMatch.addPlayer(new GamePlayer({id: 2, name: "Thalita"}, COLORS["red"]))
         this.warMatch.addPlayer(new GamePlayer({id: 3, name: "Rafa"}, COLORS["yellow"]))
         this.warMatch.addPlayer(new GamePlayer({id: 4, name: "Ygor"}, COLORS["green"]))
-        // this.warMatch.addPlayer(new GamePlayer({id: 5, name: "Edu"}, COLORS["blue"]))
-        // this.warMatch.addPlayer(new GamePlayer({id: 6, name: "Tiago"}, COLORS["pink"]))
+        this.warMatch.addPlayer(new GamePlayer({id: 5, name: "Edu"}, COLORS["blue"]))
+        this.warMatch.addPlayer(new GamePlayer({id: 6, name: "Tiago"}, COLORS["pink"]))
 
         this.warMatch.board.setTerritories(TerritoryFactory.loadCountries(this))
         
@@ -56,7 +56,7 @@ export class MainGameScene extends Phaser.Scene {
         
         this.warMatch.getPlayerTotalTerritories(this.warMatch.players[0])
 
-        this.warMatch.showPlayers(this)
+        // this.warMatch.showPlayers(this)
 
         this.input.on('gameobjectover', (pointer:Phaser.Input.Pointer, territory:Territory) =>
         {
