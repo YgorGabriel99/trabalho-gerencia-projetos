@@ -87,7 +87,7 @@ export class Territory extends Phaser.GameObjects.Container {
     }
 
     highlightNeighbours(territories:Array<Territory>) {
-        const neighbors = territories.filter(territory => {
+        territories.filter(territory => {
             return this.neighbors.includes(territory.id) && this.owner !== territory.owner
         }).forEach(territory =>{
             territory.highlight()
@@ -95,7 +95,8 @@ export class Territory extends Phaser.GameObjects.Container {
     }
 
     unhighlightNeighbours(territories:Array<Territory>) {
-        const neighbors = territories.filter(territory => {
+        // const neighbors = 
+        territories.filter(territory => {
             return this.neighbors.includes(territory.id) && this.owner !== territory.owner
         }).forEach(territory =>{
             territory.unhighlight()

@@ -1,10 +1,11 @@
-import { FirstGameScene } from './first-scene';
+// import { FirstGameScene } from './first-scene';
 import Phaser from 'phaser';
 // import './reset.css';
 import './style.css';
 import { MainGameScene } from './main-scene';
-import { GamePlayer } from './model/GamePlayer';
-
+// import { GamePlayer } from './model/GamePlayer';
+import PreloadScene from './scenes/PreloadScene';
+import TurnControllerScene from './scenes/TurnControllerScene';
 
 const config: Phaser.Types.Core.GameConfig = {
     width: 1227,
@@ -12,19 +13,18 @@ const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
     parent: 'game-container',
     backgroundColor: '#B4CDFF',
-    scene: [MainGameScene]
+    scene: [PreloadScene, MainGameScene,TurnControllerScene]
   };
 
 // new Phaser.Game(config);
 
 export class WarGame extends Phaser.Game{
     constructor(config:Phaser.Types.Core.GameConfig) {
-      super(config);
-      
+      super(config); 
     }
 }
 
-const game = new WarGame(config);
+new WarGame(config);
 // game.addPlayer(new GamePlayer({id:1, name:'Paulo'}));
 // game.addPlayer(new GamePlayer({id:2, name:'Tiago'}));
 

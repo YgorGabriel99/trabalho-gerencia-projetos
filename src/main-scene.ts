@@ -24,15 +24,16 @@ export class MainGameScene extends Phaser.Scene {
 
     preload():void{
         //Carregando os territórios
-        let territorios = this.load.aseprite('territorios', 
-        '../assets/images/mapa_war.png',
-        '../assets/images/mapa_war.json')
+        // let territorios = this.load.aseprite('territorios', 
+        // '../assets/images/mapa_war.png',
+        // '../assets/images/mapa_war.json')
 
         //Carregando a fonte
         this.load.bitmapFont('pressstart', 'assets/fonts/pressstart.png','assets/fonts/pressstart.fnt') 
         
         // //Carregando dados do mapa
-        let data = this.load.json('frame', 'assets/images/mapa_war.json');
+        // let data = 
+        this.load.json('frame', 'assets/images/mapa_war.json');
         this.load.json('territories', 'assets/data/territories.json');
         // console.log(territories)
         
@@ -58,14 +59,14 @@ export class MainGameScene extends Phaser.Scene {
 
         // this.warMatch.showPlayers(this)
 
-        this.input.on('gameobjectover', (pointer:Phaser.Input.Pointer, territory:Territory) =>
+        this.input.on('gameobjectover', (territory:Territory) =>
         {
             if(!this.warMatch.board.hasSelectedTerritory()){
                 territory.highlight();
             }
         });
 
-        this.input.on('gameobjectout', (pointer:Phaser.Input.Pointer, territory:Territory) =>
+        this.input.on('gameobjectout', ( territory:Territory) =>
         {
             if(!this.warMatch.board.hasSelectedTerritory()){
                 territory.updateTint();
@@ -73,7 +74,7 @@ export class MainGameScene extends Phaser.Scene {
             
         });
 
-        this.input.on('gameobjectdown', (pointer:Phaser.Input.Pointer, territory:Territory) =>{
+        this.input.on('gameobjectdown', ( territory:Territory) =>{
 
             if (!this.warMatch.board.hasSelectedTerritory()){
                 this.warMatch.board.clearBoard()
@@ -100,7 +101,7 @@ export class MainGameScene extends Phaser.Scene {
         this.add.bitmapText(10,10,'pressstart','WAR')
     }
 
-    update(time: number, delta: number): void {
+    update(): void {
 
     }
 }

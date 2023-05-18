@@ -1,4 +1,3 @@
-import { MainGameScene } from "../main-scene";
 import { GamePlayer } from "../model/GamePlayer";
 import { Territory } from "../model/Territory";
 import { Board } from "./Board";
