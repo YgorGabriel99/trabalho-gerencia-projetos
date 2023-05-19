@@ -3,7 +3,7 @@
   "homepage": "https://alunosuff.github.io/trabalho-gerencia-projetos/",
   "scripts": {
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "gh-pages -d dist",
     "dev": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview"
