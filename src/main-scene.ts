@@ -24,9 +24,9 @@ export class MainGameScene extends Phaser.Scene {
 
     preload():void{
         //Carregando os territórios
-        // let territorios = this.load.aseprite('territorios', 
-        // '../assets/images/mapa_war.png',
-        // '../assets/images/mapa_war.json')
+        let territorios = this.load.aseprite('territorios', 
+        '../assets/images/mapa_war.png',
+        '../assets/images/mapa_war.json')    
 
         //Carregando a fonte
         this.load.bitmapFont('pressstart', 'assets/fonts/pressstart.png','assets/fonts/pressstart.fnt') 
@@ -59,14 +59,15 @@ export class MainGameScene extends Phaser.Scene {
 
         // this.warMatch.showPlayers(this)
 
-        this.input.on('gameobjectover', (territory:Territory) =>
+        this.input.on('gameobjectover', (pointer:Phaser.Input.Pointer, territory:Territory) =>
         {
             if(!this.warMatch.board.hasSelectedTerritory()){
+                // console.log(territory)
                 territory.highlight();
             }
         });
 
-        this.input.on('gameobjectout', ( territory:Territory) =>
+        this.input.on('gameobjectout', (pointer:Phaser.Input.Pointer,  territory:Territory) =>
         {
             if(!this.warMatch.board.hasSelectedTerritory()){
                 territory.updateTint();
@@ -74,7 +75,7 @@ export class MainGameScene extends Phaser.Scene {
             
         });
 
-        this.input.on('gameobjectdown', ( territory:Territory) =>{
+        this.input.on('gameobjectdown', (pointer:Phaser.Input.Pointer, territory:Territory) =>{
 
             if (!this.warMatch.board.hasSelectedTerritory()){
                 this.warMatch.board.clearBoard()
