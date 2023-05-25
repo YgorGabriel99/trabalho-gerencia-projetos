@@ -16,7 +16,7 @@ export class TerritoryFactory{
                     id: territory.id,
                     x: 0, 
                     y: 0,
-                    armies: 1,
+                    armies: 0,
                     spriteSource: territoriosData[territory.slug].spriteSourceSize,
                     neighbors: territory.neighbors,
                     name: territory.name,

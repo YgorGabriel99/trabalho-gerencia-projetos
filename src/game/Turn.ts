@@ -5,11 +5,17 @@ export class Turn{
     public playersOrders: number[] = [];
     public currentPhase: number = -1;
     public phases: string[] = ["mobilizar","atacar","fortificar"];
+    
+    constructor() {
 
-    constructor(totalPlayers: number) {
+    }
+    
+    setTotalPlayers(totalPlayers: number){
         this.totalPlayers = totalPlayers;
     }
-
-
-
+    
+    init() {
+        
+    }
+    
 }

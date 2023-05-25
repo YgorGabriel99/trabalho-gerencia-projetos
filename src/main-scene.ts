@@ -5,6 +5,11 @@ import { Turn } from "./game/Turn";
 import { GamePlayer } from "./model/GamePlayer";
 import { Territory } from "./model/Territory";
 import { Board } from "./game/Board";
+import eventsCenter from "./services/EventsCenter";
+import PlayerType from "./model/Player";
+import InitGameScene from "./scenes/InitGameScene";
+
+
 
 const COLORS = {
     'black': 0x4f4f4d,
@@ -17,9 +22,12 @@ const COLORS = {
 
 export class MainGameScene extends Phaser.Scene {
 
+    // public initGame:
+    // public initGame: InitGame;
     public warMatch!: WarMatch;
     constructor() {
         super('MainGameScene');
+        
     }
 
     preload():void{
@@ -43,23 +51,23 @@ export class MainGameScene extends Phaser.Scene {
     
     create(): void {
 
-        this.warMatch = new WarMatch(new Board(), new Turn(2));
-        this.warMatch.addPlayer(new GamePlayer({id: 1, name: "Paulo"},COLORS["black"]))
-        this.warMatch.addPlayer(new GamePlayer({id: 2, name: "Thalita"}, COLORS["red"]))
-        this.warMatch.addPlayer(new GamePlayer({id: 3, name: "Rafa"}, COLORS["yellow"]))
-        this.warMatch.addPlayer(new GamePlayer({id: 4, name: "Ygor"}, COLORS["green"]))
-        this.warMatch.addPlayer(new GamePlayer({id: 5, name: "Edu"}, COLORS["blue"]))
-        this.warMatch.addPlayer(new GamePlayer({id: 6, name: "Tiago"}, COLORS["pink"]))
+        this.warMatch = new WarMatch(new Board(), new Turn());
+        // this.warMatch.addPlayer(new GamePlayer({id: 1, name: "Paulo"},COLORS["black"]))
+        // this.warMatch.addPlayer(new GamePlayer({id: 2, name: "Thalita"}, COLORS["red"]))
+        // this.warMatch.addPlayer(new GamePlayer({id: 3, name: "Rafa"}, COLORS["yellow"]))
+        // this.warMatch.addPlayer(new GamePlayer({id: 4, name: "Ygor"}, COLORS["green"]))
+        // this.warMatch.addPlayer(new GamePlayer({id: 5, name: "Edu"}, COLORS["blue"]))
+        // this.warMatch.addPlayer(new GamePlayer({id: 6, name: "Tiago"}, COLORS["pink"]))
 
         this.warMatch.board.setTerritories(TerritoryFactory.loadCountries(this))
         
-        this.warMatch.shufflePlayerInBoard()
+        // this.warMatch.shufflePlayerInBoard()
         
-        this.warMatch.getPlayerTotalTerritories(this.warMatch.players[0])
+        // this.warMatch.getPlayerTotalTerritories(this.warMatch.players[0])
 
         // this.warMatch.showPlayers(this)
 
-        this.input.on('gameobjectover', (pointer:Phaser.Input.Pointer, territory:Territory) =>
+        /* this.input.on('gameobjectover', (pointer:Phaser.Input.Pointer, territory:Territory) =>
         {
             if(!this.warMatch.board.hasSelectedTerritory()){
                 // console.log(territory)
@@ -98,8 +106,20 @@ export class MainGameScene extends Phaser.Scene {
             }else {
                 alert("Movimento inválido")
             }
-        })
+        }) */
         this.add.bitmapText(10,10,'pressstart','WAR')
+
+        this.scene.run("InitGameScene")
+
+        eventsCenter.on("init", (players: InitGameScene) => {
+            this.warMatch.init(players)
+        })
+
+        eventsCenter.on("showUI", () => {
+
+        })
+
+
     }
 
     update(): void {

@@ -1,13 +1,22 @@
 import { GamePlayer } from "../model/GamePlayer";
 import { Territory } from "../model/Territory";
+import PlayerType from "../scenes/InitGameScene";
+import eventsCenter from "../services/EventsCenter";
 import { Board } from "./Board";
 import { Turn } from "./Turn";
 
+enum Status {
+    SETUP = 0,
+    STARTED = 1,
+    FINISHED = 2
+}
 export class WarMatch{
+    
     
     public players: Array<GamePlayer> = [];
     public turn: Turn;
     public board: Board;
+    public status: number = Status.SETUP
     constructor(board: Board,  turn: Turn) {
         this.turn = turn;
         this.board = board;
@@ -33,7 +42,6 @@ export class WarMatch{
             // console.log(player.id)
             return territory.owner?.id === player.id
         })
-        console.log()
         return territoriesOwned.length
     }
 
@@ -72,5 +80,18 @@ export class WarMatch{
             )
             .setTintFill(player.color)
         })
+    }
+
+    init(players: PlayerType) {
+        
+        players.forEach(player =>{
+            this.addPlayer(new GamePlayer(player))
+        })
+        console.log(this)
+        this.shufflePlayerInBoard()
+
+        this.turn.init()
+
+        eventsCenter.emit('showUI')
     }
 }
