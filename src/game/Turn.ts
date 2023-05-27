@@ -41,4 +41,9 @@ export class Turn{
     getCurrentPhaseName(){
         return this.phasesNames[this.currentPhase]
     }
+
+    nextPhase(){
+        this.currentPhase++;
+        this.currentPhase %= this.phasesNames.length
+    }
 }

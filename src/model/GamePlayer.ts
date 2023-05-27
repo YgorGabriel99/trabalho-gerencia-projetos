@@ -14,21 +14,26 @@ export class GamePlayer extends Player{
     public color: number;
     public totalArmies: number;
     public totalTerritories: number;
-
+    public playerText: Phaser.GameObjects.Text;
+    
     // public ia: boolean;
     constructor(data:PlayerType, color: number) {
         super(data);
         this.color = color;
     }
 
+    destroyPlayerText(){
+        this.playerText.destroy()
+    }
+
     showGamePlayer(x: number, y: number, currentPlayerId:number, scene:Phaser.Scene) {
         let isCurrentPlayer = currentPlayerId === this.id;
-        let playerText = scene.add.text(x,y,`${this.name} ⚒: ${this.totalArmies} ⦻: ${this.totalTerritories}`)
+        this.playerText = scene.add.text(x,y,`${this.name} ⚒: ${this.totalArmies} ⦻: ${this.totalTerritories}`)
         .setColor(`#${this.color.toString(16)}`)
         if(isCurrentPlayer){
-            playerText.setBackgroundColor("#ffffff55")
+            this.playerText.setBackgroundColor("#ffffff55")
         }
-        playerText.setInteractive( { useHandCursor: true  } );
+        this.playerText.setInteractive( { useHandCursor: true  } );
     }    
 
 }
