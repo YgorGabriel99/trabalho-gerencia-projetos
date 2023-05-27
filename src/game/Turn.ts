@@ -44,6 +44,13 @@ export class Turn{
 
     nextPhase(){
         this.currentPhase++;
+        if(!(this.currentPhase < this.phasesNames.length)){
+            this.nextTurn();
+        }
         this.currentPhase %= this.phasesNames.length
+    }
+
+    nextTurn(){
+        this.nextPlayer();
     }
 }
