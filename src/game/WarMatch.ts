@@ -1,7 +1,8 @@
-import { GamePlayer } from "../model/GamePlayer";
+import { GamePlayer, playerCOLORS } from "../model/GamePlayer";
+import PlayerType, { Player } from "../model/Player";
 import { Territory } from "../model/Territory";
-import PlayerType from "../scenes/InitGameScene";
 import eventsCenter from "../services/EventsCenter";
+import { TerritoryFactory } from "../services/territory-factory";
 import { Board } from "./Board";
 import { Turn } from "./Turn";
 
@@ -12,14 +13,15 @@ enum Status {
 }
 export class WarMatch{
     
-    
+    public scene: Phaser.Scene;
     public players: Array<GamePlayer> = [];
     public turn: Turn;
     public board: Board;
     public status: number = Status.SETUP
-    constructor(board: Board,  turn: Turn) {
+    constructor(board: Board,  turn: Turn, scene: Phaser.Scene) {
         this.turn = turn;
         this.board = board;
+        this.scene = scene;
     }
 
     getTotalPlayers(): number {
@@ -30,68 +32,71 @@ export class WarMatch{
         this.players.push(player);
     }
 
+    getPlayerById(id: number): GamePlayer {
+        const player: GamePlayer = this.players.find(player => player.id === id);
+        return player
+    }
+
     shufflePlayerInBoard(): void {
-        this.board.territories.forEach((territory, index) =>{
-            territory.setOwner(this.players[index % this.getTotalPlayers()])
+        this.board.territoryCards.forEach((territoryCard) =>{
+            let territory = this.board.getTerritoryById(territoryCard)
+            let player = this.getPlayerById(this.turn.getCurrentPlayerId())
+            territory?.setOwner(player)
+            territory?.setInitialArmies()
+            territory?.updateText()
+            this.turn.nextPlayer()
         })
     }
 
-    getPlayerTotalTerritories(player:GamePlayer):number{
+    setPlayerTotalTerritories(player:GamePlayer){
         const territoriesOwned =  this.board.territories.filter((territory) =>{
-            // console.log(territory.owner?.id)
-            // console.log(player.id)
             return territory.owner?.id === player.id
         })
-        return territoriesOwned.length
+        player.totalTerritories = territoriesOwned.length
     }
 
     getPlayerTerritories(player:GamePlayer):Array<Territory> {
         const territoriesOwned =  this.board.territories.filter((territory) =>{
-            // console.log(territory.owner?.id)
-            // console.log(player.id)
             return territory.owner?.id === player.id
         })
         return territoriesOwned
     }
 
     //Está com erro no reduce !!!!!!!!!
-    getPlayerTotalArmies(player:GamePlayer):number{
+    setPlayerTotalArmies(player:GamePlayer){
         const totalArmies = this.getPlayerTerritories(player).reduce(
             function(previousValue, currentValue:Territory){
-                console.log(previousValue)
-                console.log(currentValue.armies)
                 return previousValue + currentValue.armies
             },0
         )
-        console.log(totalArmies)
-        return totalArmies
+        player.totalArmies = totalArmies;
     }
 
-    showPlayers(scene: Phaser.Scene) {
-        let x = 600;
-        let y = 20;
-        this.players.forEach((player:GamePlayer, index:number) => {
-            scene.add.bitmapText(
-                x, 
-                y + (index * 80),
-                'pressstart',
-                `${player.name} ${this.getPlayerTotalTerritories(player)} Territórios`, 
-                24
-            )
-            .setTintFill(player.color)
-        })
-    }
+    init(players: PlayerType[]):boolean {
 
-    init(players: PlayerType) {
+        // if(players.length < 3){
+        //     let msg = "Deve haver pelo menos três jogadores"
+        //     eventsCenter.emit('restart', msg)
+        //     eventsCenter.emit('showModal', msg)
+        //     return false
+        // }
         
-        players.forEach(player =>{
-            this.addPlayer(new GamePlayer(player))
+        players.forEach((player: PlayerType) =>{
+            this.addPlayer(new GamePlayer(player, playerCOLORS[player.color]))
         })
-        console.log(this)
+        
+        let playersIds = players.map(player => {
+            return player.id
+        })
+        this.turn.init(playersIds);
+        let territoryIds = this.scene.cache.json.get('territories').territories
+        .map((territory:Territory) => {
+            return territory.id;
+        })
+        this.board.setTerritories(TerritoryFactory.loadCountries(this.scene))
+        this.board.init(territoryIds)
+
         this.shufflePlayerInBoard()
-
-        this.turn.init()
-
-        eventsCenter.emit('showUI')
+        return true
     }
 }

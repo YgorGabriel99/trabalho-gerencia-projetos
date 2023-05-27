@@ -8,6 +8,7 @@ import { Board } from "./game/Board";
 import eventsCenter from "./services/EventsCenter";
 import PlayerType from "./model/Player";
 import InitGameScene from "./scenes/InitGameScene";
+import Util from "./services/Util";
 
 
 
@@ -22,9 +23,8 @@ const COLORS = {
 
 export class MainGameScene extends Phaser.Scene {
 
-    // public initGame:
-    // public initGame: InitGame;
     public warMatch!: WarMatch;
+    public inputKeys: object;
     constructor() {
         super('MainGameScene');
         
@@ -40,10 +40,8 @@ export class MainGameScene extends Phaser.Scene {
         this.load.bitmapFont('pressstart', 'assets/fonts/pressstart.png','assets/fonts/pressstart.fnt') 
         
         // //Carregando dados do mapa
-        // let data = 
         this.load.json('frame', 'assets/images/mapa_war.json');
         this.load.json('territories', 'assets/data/territories.json');
-        // console.log(territories)
         
         
         
@@ -51,16 +49,8 @@ export class MainGameScene extends Phaser.Scene {
     
     create(): void {
 
-        this.warMatch = new WarMatch(new Board(), new Turn());
-        // this.warMatch.addPlayer(new GamePlayer({id: 1, name: "Paulo"},COLORS["black"]))
-        // this.warMatch.addPlayer(new GamePlayer({id: 2, name: "Thalita"}, COLORS["red"]))
-        // this.warMatch.addPlayer(new GamePlayer({id: 3, name: "Rafa"}, COLORS["yellow"]))
-        // this.warMatch.addPlayer(new GamePlayer({id: 4, name: "Ygor"}, COLORS["green"]))
-        // this.warMatch.addPlayer(new GamePlayer({id: 5, name: "Edu"}, COLORS["blue"]))
-        // this.warMatch.addPlayer(new GamePlayer({id: 6, name: "Tiago"}, COLORS["pink"]))
-
-        this.warMatch.board.setTerritories(TerritoryFactory.loadCountries(this))
-        
+        this.warMatch = new WarMatch(new Board(), new Turn(), this);
+       
         // this.warMatch.shufflePlayerInBoard()
         
         // this.warMatch.getPlayerTotalTerritories(this.warMatch.players[0])
@@ -111,15 +101,27 @@ export class MainGameScene extends Phaser.Scene {
 
         this.scene.run("InitGameScene")
 
-        eventsCenter.on("init", (players: InitGameScene) => {
-            this.warMatch.init(players)
+        //Eventos
+        eventsCenter.on("init", (players: PlayerType[]) => {
+            if(this.warMatch.init(players)){
+                this.scene.stop("InitGameScene")
+                this.scene.run("ShowUIScene",{warMatch: this.warMatch})
+            }else{
+                this.scene.launch("InitGameScene")
+            }
         })
 
-        eventsCenter.on("showUI", () => {
-
+        eventsCenter.on("restart", (msg:string) => {
+            this.scene.restart()
         })
 
+        eventsCenter.on("showModal", (msg:string) => {
+            console.log(msg)
+        })
 
+        this.input.keyboard.on("keydown-Q",()=>{
+            this.scene.launch("ShowUIScene",{warMatch: this.warMatch})
+        })
     }
 
     update(): void {

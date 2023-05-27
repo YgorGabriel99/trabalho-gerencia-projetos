@@ -22,10 +22,11 @@ export class TerritoryFactory{
                     name: territory.name,
                     slug: territory.slug    
                 }
-            )  
+            ) 
             territorios.push(territorio)
             // territorios.add(territorio);
         });
+        
         return territorios;
     }
 }

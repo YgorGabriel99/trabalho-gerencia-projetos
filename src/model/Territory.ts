@@ -34,8 +34,20 @@ export class Territory extends Phaser.GameObjects.Container {
         this.armies = armies;
         this.name = name;
         this.scene = scene;
+        // this.animate();
         this.scene.add.existing(this);
     }
+
+    // animate(){
+    //     this.scene.tweens.add({
+    //         targets: this,
+    //         props:{
+    //             y: { value: '50', duration: 1500, ease: 'Bounce.easeOut', yoyo: 'easeOut' }
+    //         },
+    //         duration: 10000,
+    //         ease: 'Power3'
+    //     });
+    // }
 
     changeSelected():void{
         this.isSelected = !this.isSelected
@@ -46,8 +58,6 @@ export class Territory extends Phaser.GameObjects.Container {
     }
 
     public highlight():void{
-        // this.spriteTerritory.setTint(0xcfcfcf)
-        // this.spriteTerritory.setTintFill(0xffffff)
         this.changeHighlighted()
         this.spriteTerritory.setAlpha(0.4)
     }
@@ -108,7 +118,6 @@ export class Territory extends Phaser.GameObjects.Container {
     }
 
     attack(territory: Territory){
-        console.log("attack")
         if(this.armies < 2){
             alert("Movimento inválido, você não tem exércitos suficientes")
             return
@@ -119,5 +128,12 @@ export class Territory extends Phaser.GameObjects.Container {
         }
     }
 
+    placeArmies(quantity: number){
+        this.armies += quantity;
+    }
+
+    setInitialArmies(){
+        this.armies = 1;
+    }
 
 }

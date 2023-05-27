@@ -5,7 +5,6 @@ export default class InitGameScene extends Phaser.Scene{
 
     constructor() {
         super("InitGameScene")
-        console.log("initGameScene")
     }
 
     preload(){
@@ -33,9 +32,8 @@ export default class InitGameScene extends Phaser.Scene{
                     players.push(player)
                 }
             }
-
             eventsCenter.emit('init', players);
-            this.scene.stop()
+            this.scene.stop();
         })
 
         this.tweens.add({
@@ -44,10 +42,8 @@ export default class InitGameScene extends Phaser.Scene{
             duration: 500,
             ease: 'Power3'
         })
+
+        
     }
 
-}
-
-function value(value: FormDataEntryValue, key: string, parent: FormData): void {
-    throw new Error("Function not implemented.");
 }

@@ -1,7 +1,28 @@
 import { Territory } from "../model/Territory";
+import Util from "../services/Util";
 
 export class Board {
+    
+
     public territories: Array<Territory> = [];
+    public territoryCards: number[] = [];
+    public objectiveCards: number[] = [];
+
+    init(territoryIds: number[]) {
+        this.setInitialTerritoryCards(territoryIds)
+        this.shuffleTerritorieyCards();
+    }
+
+    getTerritoryById(id: number){
+        return this.territories.find(territory => territory.id === id);
+    }
+
+
+    shuffleTerritorieyCards() {
+        this.territoryCards = Util.shuffle(
+            this.territoryCards
+        )
+    }
 
     public setTerritories(territories: Array<Territory>):void{
         this.territories = territories
@@ -46,4 +67,17 @@ export class Board {
         )
         return highlightedTerritories[0]
     }
+
+    setInitialTerritoryCards(territories: number[]){
+        this.territoryCards = territories
+    }
+
+    hasTerritoryWIthoutOwner(){
+        const woTerritory = this.territories.filter(territory =>{
+            return territory.owner === undefined
+        })
+        return woTerritory.length > 0
+    }
+
+
 }

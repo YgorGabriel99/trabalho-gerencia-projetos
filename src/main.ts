@@ -7,6 +7,7 @@ import { MainGameScene } from './main-scene';
 import PreloadScene from './scenes/PreloadScene';
 import TurnControllerScene from './scenes/TurnControllerScene';
 import InitGameScene from "./scenes/InitGameScene"
+import ShowUIScene from './scenes/ShowUIScene';
 
 const config: Phaser.Types.Core.GameConfig = {
     width: 1227,
@@ -17,7 +18,7 @@ const config: Phaser.Types.Core.GameConfig = {
     dom: {
       createContainer: true,
     },
-    scene: [PreloadScene, MainGameScene,TurnControllerScene, InitGameScene]
+    scene: [PreloadScene, MainGameScene,TurnControllerScene, InitGameScene, ShowUIScene]
   };
 
 // new Phaser.Game(config);
