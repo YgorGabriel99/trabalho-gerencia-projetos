@@ -99,11 +99,33 @@ export class MainGameScene extends Phaser.Scene {
         }) */
         this.add.bitmapText(10,10,'pressstart','WAR')
 
-        this.scene.run("InitGameScene")
+        // let players = [
+        //     {id: 1,name: "Tiago",ia: false,color: 'black'},
+        //     {id: 2,name: "Diogo",ia: false,color: 'blue'},
+        //     {id: 3,name: "Julia",ia: false,color: 'red'},
+        //     {id: 4,name: "Gaaby",ia: false,color: 'green'},
+        //     {id: 5,name: "Baarb",ia: false,color: 'yellow'},
+        //     {id: 6,name: "Lucca",ia: false,color: 'pink'}
+        // ]
+        let players = [
+            {id: 1, name: 'Tiago', ia: 'false', color: 'black'},
+            {id: 2, name: 'Diogo', ia: 'false', color: 'blue'},
+            {id: 3, name: 'Julia', ia: 'false', color: 'red'},
+            {id: 4, name: 'Gaaby', ia: 'false', color: 'yellow'},
+            {id: 5, name: 'Baarb', ia: 'false', color: 'green'},
+            {id: 6, name: 'Lucca', ia: 'false', color: 'pink'},
+        ]
+        // this.scene.run("InitGameScene")
+        // eventsCenter.emit('init', players);
+        if(this.warMatch.init(players)){
+            this.scene.run("ShowUIScene",{warMatch: this.warMatch})
+        }
+
 
         //Eventos
         eventsCenter.on("init", (players: PlayerType[]) => {
             if(this.warMatch.init(players)){
+                console.log(players)
                 this.scene.stop("InitGameScene")
                 this.scene.run("ShowUIScene",{warMatch: this.warMatch})
             }else{

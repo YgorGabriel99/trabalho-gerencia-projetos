@@ -2,7 +2,7 @@ import PlayerType, { Player } from "./Player";
 
 export enum playerCOLORS  {
     'black' = 0x4f4f4d,
-    'green' = 0x03a95e,
+    'green' = 0x13a95b,
     'yellow' = 0xe9ae02,
     'blue' = 0x1a54a5,
     'pink' = 0xde2587,
@@ -30,6 +30,7 @@ export class GamePlayer extends Player{
         let isCurrentPlayer = currentPlayerId === this.id;
         this.playerText = scene.add.text(x,y,`${this.name} ⚒: ${this.totalArmies} ⦻: ${this.totalTerritories}`)
         .setColor(`#${this.color.toString(16)}`)
+        console.log(`#${this.color.toString(16)}`)
         if(isCurrentPlayer){
             this.playerText.setBackgroundColor("#ffffff55")
         }
