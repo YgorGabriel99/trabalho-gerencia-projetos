@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import { TerritoryFactory } from './services/territory-factory'
 import { WarMatch } from "./game/WarMatch";
-import { Turn } from "./game/Turn";
+import { Phases, Turn } from "./game/Turn";
 import { GamePlayer } from "./model/GamePlayer";
 import { Territory } from "./model/Territory";
 import { Board } from "./game/Board";
@@ -42,8 +42,6 @@ export class MainGameScene extends Phaser.Scene {
         // //Carregando dados do mapa
         this.load.json('frame', 'assets/images/mapa_war.json');
         this.load.json('territories', 'assets/data/territories.json');
-        
-        
         
     }
     
@@ -107,19 +105,8 @@ export class MainGameScene extends Phaser.Scene {
         //     {id: 5,name: "Baarb",ia: false,color: 'yellow'},
         //     {id: 6,name: "Lucca",ia: false,color: 'pink'}
         // ]
-        let players = [
-            {id: 1, name: 'Tiago', ia: 'false', color: 'black'},
-            {id: 2, name: 'Diogo', ia: 'false', color: 'blue'},
-            {id: 3, name: 'Julia', ia: 'false', color: 'red'},
-            {id: 4, name: 'Gaaby', ia: 'false', color: 'yellow'},
-            {id: 5, name: 'Baarb', ia: 'false', color: 'green'},
-            {id: 6, name: 'Lucca', ia: 'false', color: 'pink'},
-        ]
-        // this.scene.run("InitGameScene")
-        // eventsCenter.emit('init', players);
-        if(this.warMatch.init(players)){
-            this.scene.run("ShowUIScene",{warMatch: this.warMatch})
-        }
+        
+        
 
 
         //Eventos
@@ -144,6 +131,49 @@ export class MainGameScene extends Phaser.Scene {
         this.input.keyboard.on("keydown-Q",()=>{
             this.scene.launch("ShowUIScene",{warMatch: this.warMatch})
         })
+
+        eventsCenter.on(this.warMatch.turn.phasesNames[Phases.MOBILIZAR],(msg: any)=>{
+            //FALTA O MÉTODO DE CÁLCULO DA TOTALIDADE!!!!!!
+            //Calcular total de exercitos
+            this.warMatch.getTotalArmiesToPlace()
+            // console.log(this.warMatch)
+        })
+
+        eventsCenter.on(this.warMatch.turn.phasesNames[Phases.ATACAR],(msg: any)=>{
+            console.log(msg)
+            // console.log(this.warMatch)
+        })
+
+        eventsCenter.on(this.warMatch.turn.phasesNames[Phases.FORTIFICAR],(msg: any)=>{
+            console.log(msg)
+            // console.log(this.warMatch)
+        })
+
+        eventsCenter.on("territory-clicked", (territory:Territory) =>{
+            if(this.warMatch.turn.currentPhase === Phases.MOBILIZAR){
+                territory.mobilizar()
+            }
+        })
+
+        eventsCenter.on("next-phase", (player:GamePlayer) =>{
+            player.clearPlaced();
+        })
+
+        let players = [
+            {id: 1, name: 'Tiago', ia: 'false', color: 'black'},
+            {id: 2, name: 'Diogo', ia: 'false', color: 'blue'},
+            {id: 3, name: 'Julia', ia: 'false', color: 'red'},
+            {id: 4, name: 'Gaaby', ia: 'false', color: 'yellow'},
+            {id: 5, name: 'Baarb', ia: 'false', color: 'green'},
+            {id: 6, name: 'Lucca', ia: 'false', color: 'pink'},
+        ]
+        // this.scene.run("InitGameScene")
+        // eventsCenter.emit('init', players);
+
+        if(this.warMatch.init(players)){
+            this.scene.run("ShowUIScene",{warMatch: this.warMatch})
+        }
+        
     }
 
     update(): void {

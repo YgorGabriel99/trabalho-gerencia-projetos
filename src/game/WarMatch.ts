@@ -12,6 +12,7 @@ enum Status {
     FINISHED = 2
 }
 export class WarMatch{
+
     
     public scene: Phaser.Scene;
     public players: Array<GamePlayer> = [];
@@ -53,7 +54,7 @@ export class WarMatch{
             return territory.owner?.id === player.id
         })
         player.totalTerritories = territoriesOwned.length
-    }
+    }   
 
     getPlayerTerritories(player:GamePlayer):Array<Territory> {
         const territoriesOwned =  this.board.territories.filter((territory) =>{
@@ -82,7 +83,7 @@ export class WarMatch{
         // }
         
         players.forEach((player: PlayerType) =>{
-            this.addPlayer(new GamePlayer(player, playerCOLORS[player.color]))
+            this.addPlayer(new GamePlayer(player, playerCOLORS[player.color], this))
         })
         
         let playersIds = players.map(player => {
@@ -97,6 +98,27 @@ export class WarMatch{
         this.board.init(territoryIds)
 
         this.shufflePlayerInBoard()
+        eventsCenter.emit()
         return true
+    }
+
+    getTotalArmiesToPlace() {
+        // let player = game.getCurrentPlayer()
+        let player = this.turn.getCurrentPlayer(this.players)
+        this.setPlayerTotalTerritories(player)
+        // let general = player?.totalTerritories
+
+        // console.log(general)
+        
+        player?.setPlaceble("all", Math.max(Math.floor(player.totalTerritories/2), 3))
+        
+
+
+        // let general = game.getPlayerTerritoriesCount(player)
+        // player.placeble.all = Math.max(Math.floor(general/2), 3)
+    }
+
+    getCurrentPlayer(){
+        return this.turn.getCurrentPlayer(this.players)
     }
 }

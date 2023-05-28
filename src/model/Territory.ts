@@ -1,3 +1,4 @@
+import eventsCenter from "../services/EventsCenter";
 import { GamePlayer } from "./GamePlayer";
 
 export class Territory extends Phaser.GameObjects.Container {
@@ -34,21 +35,36 @@ export class Territory extends Phaser.GameObjects.Container {
         this.armies = armies;
         this.name = name;
         this.scene = scene;
-        // this.animate();
         this.scene.add.existing(this);
+        this.on("pointerdown", ()=>{
+            eventsCenter.emit("territory-clicked", this)
+        });
+        this.on("pointerover", this.hoverIn)
+        this.on("pointerout", this.hoverOut)
     }
 
-    // animate(){
-    //     this.scene.tweens.add({
-    //         targets: this,
-    //         props:{
-    //             y: { value: '50', duration: 1500, ease: 'Bounce.easeOut', yoyo: 'easeOut' }
-    //         },
-    //         duration: 10000,
-    //         ease: 'Power3'
-    //     });
-    // }
+    hoverIn(){
+        this.highlight();
+    }
 
+    hoverOut(){
+        this.updateTint();
+    }
+
+    mobilizar() {
+        
+        if(this.owner?.isCurrentPlayer() && this.owner.hasArmiesToPlace()){
+            this.placeArmies(1);
+            this.owner.placeArmie("all",1)
+        }
+        // else{
+        //     this.unplaceArmies(1)
+        //     this.owner?.unplaceArmie("all",1)
+        // }
+        eventsCenter.emit("armies-placed")
+    }
+
+    
     changeSelected():void{
         this.isSelected = !this.isSelected
     }
@@ -130,6 +146,14 @@ export class Territory extends Phaser.GameObjects.Container {
 
     placeArmies(quantity: number){
         this.armies += quantity;
+        this.updateText();
+    }
+
+    unplaceArmies(quantity: number){
+        if(this.armies > quantity){
+            this.armies -= quantity;
+            this.updateText();
+        }
     }
 
     setInitialArmies(){
