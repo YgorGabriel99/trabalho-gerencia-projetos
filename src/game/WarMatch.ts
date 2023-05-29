@@ -4,7 +4,7 @@ import { Territory } from "../model/Territory";
 import eventsCenter from "../services/EventsCenter";
 import { TerritoryFactory } from "../services/territory-factory";
 import { Board } from "./Board";
-import { Turn } from "./Turn";
+import { Phases, Turn } from "./Turn";
 
 enum Status {
     SETUP = 0,
@@ -50,9 +50,11 @@ export class WarMatch{
     }
 
     setPlayerTotalTerritories(player:GamePlayer){
+        console.log(player)
         const territoriesOwned =  this.board.territories.filter((territory) =>{
             return territory.owner?.id === player.id
         })
+        console.log(territoriesOwned.length)
         player.totalTerritories = territoriesOwned.length
     }   
 
@@ -98,18 +100,20 @@ export class WarMatch{
         this.board.init(territoryIds)
 
         this.shufflePlayerInBoard()
-        eventsCenter.emit()
+        eventsCenter.emit(this.turn.phasesNames[Phases.MOBILIZAR],this.turn.phasesNames[Phases.MOBILIZAR])
         return true
     }
 
     getTotalArmiesToPlace() {
+        console.log(this)
         // let player = game.getCurrentPlayer()
-        let player = this.turn.getCurrentPlayer(this.players)
+        let player = this.getCurrentPlayer()
         this.setPlayerTotalTerritories(player)
         // let general = player?.totalTerritories
 
-        // console.log(general)
+        console.log(player)
         
+        console.log(player.totalTerritories)
         player?.setPlaceble("all", Math.max(Math.floor(player.totalTerritories/2), 3))
         
 

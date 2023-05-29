@@ -18,9 +18,10 @@ export default class ShowUIScene extends Phaser.Scene {
         this.load.html('show-ui' , 'assets/html/show-ui.html');
     }
 
-    init(data: { warMatch: any; }){
+    init(data: { warMatch: WarMatch; }){
         let {warMatch} = data;
         this.warMatch = warMatch;
+        console.log(warMatch.getCurrentPlayer()?.totalTerritories);
     }
 
     destroyUI(){

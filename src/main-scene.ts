@@ -198,9 +198,7 @@ export class MainGameScene extends Phaser.Scene {
             {id: 1, name: 'Tiago', ia: 'false', color: 'black'},
             {id: 2, name: 'Diogo', ia: 'false', color: 'blue'},
             {id: 3, name: 'Julia', ia: 'false', color: 'red'},
-            {id: 4, name: 'Gaaby', ia: 'false', color: 'yellow'},
-            {id: 5, name: 'Baarb', ia: 'false', color: 'green'},
-            {id: 6, name: 'Lucca', ia: 'false', color: 'pink'},
+
         ]
         // this.scene.run("InitGameScene")
         // eventsCenter.emit('init', players);
