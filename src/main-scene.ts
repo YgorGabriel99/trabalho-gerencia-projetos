@@ -1,75 +1,215 @@
 import Phaser from "phaser";
-import loadCountries, { TerritoryFactory } from './services/territory-factory'
+import { TerritoryFactory } from './services/territory-factory'
 import { WarMatch } from "./game/WarMatch";
-import { Turn } from "./game/Turn";
+import { Phases, Turn } from "./game/Turn";
 import { GamePlayer } from "./model/GamePlayer";
 import { Territory } from "./model/Territory";
+import { Board } from "./game/Board";
+import eventsCenter from "./services/EventsCenter";
+import PlayerType from "./model/Player";
+import InitGameScene from "./scenes/InitGameScene";
+import Util from "./services/Util";
 
-// const COLORS = {
-//     'black': 0x000000,
-//     'green': 0xff0000,
-//     'yellow': 0xe9ae02
-// }
+
+
+const COLORS = {
+    'black': 0x4f4f4d,
+    'green': 0x03a95e,
+    'yellow': 0xe9ae02,
+    'blue': 0x1a54a5,
+    'pink': 0xde2587,
+    'red': 0xec3829,
+}
+
 export class MainGameScene extends Phaser.Scene {
 
-    // public warMatch!: WarMatch;
+    public warMatch!: WarMatch;
+    public inputKeys: object;
     constructor() {
         super('MainGameScene');
+        
     }
 
     preload():void{
         //Carregando os territórios
         let territorios = this.load.aseprite('territorios', 
         '../assets/images/mapa_war.png',
-        '../assets/images/mapa_war.json')
+        '../assets/images/mapa_war.json')    
 
         //Carregando a fonte
         this.load.bitmapFont('pressstart', 'assets/fonts/pressstart.png','assets/fonts/pressstart.fnt') 
         
         // //Carregando dados do mapa
-        let data = this.load.json('frame', 'assets/images/mapa_war.json');
+        this.load.json('frame', 'assets/images/mapa_war.json');
         this.load.json('territories', 'assets/data/territories.json');
-        // console.log(territories)
-        
-        // this.warMatch = new WarMatch(new Turn(2));
-        // this.warMatch.addPlayer(new GamePlayer({id: 1, name: "Paulo"},"black"))
-        // this.warMatch.addPlayer(new GamePlayer({id: 1, name: "Tiago"}, "green"))
-        // this.warMatch.addPlayer(new GamePlayer({id: 1, name: "Rafa"}, "yellow"))
         
     }
     
     create(): void {
 
-        TerritoryFactory.loadCountries(this)
+        this.warMatch = new WarMatch(new Board(), new Turn(), this);
+       
+        // this.warMatch.shufflePlayerInBoard()
+        
+        // this.warMatch.getPlayerTotalTerritories(this.warMatch.players[0])
 
-        this.input.on('gameobjectover', (pointer:Phaser.Input.Pointer, gameObject:Phaser.GameObjects.Sprite) =>
+        // this.warMatch.showPlayers(this)
+
+        /* this.input.on('gameobjectover', (pointer:Phaser.Input.Pointer, territory:Territory) =>
         {
-            gameObject.setAlpha(0.5);
-        });
-
-        this.input.on('gameobjectout', (pointer:Phaser.Input.Pointer, gameObject:Phaser.GameObjects.Sprite) =>
-        {
-            gameObject.clearAlpha();
-        });
-
-        this.input.on('gameobjectdown', (pointer:Phaser.Input.Pointer, territory:Territory) =>{
-            // territory.spriteTerritory.setTint(0xe9ae02)
-        })
-
-        this.input.on('gameobjectdown', (pointer:Phaser.Input.Pointer, territory:Territory) =>{
-            if (territory.isSelected){
-                territory.armies++
-                territory.armiesText.setText(territory.armies.toString())
-                territory.flash()
-            }else{
-                territory.highlight()
+            if(!this.warMatch.board.hasSelectedTerritory()){
+                // console.log(territory)
+                territory.highlight();
             }
-            territory.changeSelected()
+        });
+
+        this.input.on('gameobjectout', (pointer:Phaser.Input.Pointer,  territory:Territory) =>
+        {
+            if(!this.warMatch.board.hasSelectedTerritory()){
+                territory.updateTint();
+            }
+            
+        });
+
+        this.input.on('gameobjectdown', (pointer:Phaser.Input.Pointer, territory:Territory) =>{
+
+            if (!this.warMatch.board.hasSelectedTerritory()){
+                this.warMatch.board.clearBoard()
+                territory.select()
+                territory.highlightNeighbours(this.warMatch.board.territories);
+                return
+            }else if(territory.isSelected){
+                territory.unselect()
+                territory.unhighlightNeighbours(this.warMatch.board.territories);
+                return
+            }else if(territory.isHighlighted && this.warMatch.board.getSelected()){
+                const selectedTerritory = this.warMatch.board.getSelected()
+                if(territory.isNeighbour(selectedTerritory)){
+                    alert(`${selectedTerritory.owner?.name} está atacando com ${selectedTerritory.name} o território ${territory.name} de ${territory.owner?.name}`)
+                    selectedTerritory.attack(territory)
+                    return
+                }
+                console.log(territory.isNeighbour(selectedTerritory))
+                return
+            }else {
+                alert("Movimento inválido")
+            }
+        }) */
+        this.add.bitmapText(10,10,'pressstart','WAR')
+
+        // let players = [
+        //     {id: 1,name: "Tiago",ia: false,color: 'black'},
+        //     {id: 2,name: "Diogo",ia: false,color: 'blue'},
+        //     {id: 3,name: "Julia",ia: false,color: 'red'},
+        //     {id: 4,name: "Gaaby",ia: false,color: 'green'},
+        //     {id: 5,name: "Baarb",ia: false,color: 'yellow'},
+        //     {id: 6,name: "Lucca",ia: false,color: 'pink'}
+        // ]
+        
+        
+
+
+        //Eventos
+        eventsCenter.on("init", (players: PlayerType[]) => {
+            if(this.warMatch.init(players)){
+                console.log(players)
+                this.scene.stop("InitGameScene")
+                this.scene.run("ShowUIScene",{warMatch: this.warMatch})
+            }else{
+                this.scene.launch("InitGameScene")
+            }
         })
 
+        eventsCenter.on("restart", (msg:string) => {
+            this.scene.restart()
+        })
+
+        eventsCenter.on("showModal", (msg:string) => {
+            console.log(msg)
+        })
+
+        this.input.keyboard.on("keydown-Q",()=>{
+            this.scene.launch("ShowUIScene",{warMatch: this.warMatch})
+        })
+
+        eventsCenter.on(this.warMatch.turn.phasesNames[Phases.MOBILIZAR],(msg: any)=>{
+            //FALTA O MÉTODO DE CÁLCULO DA TOTALIDADE!!!!!!
+            //Calcular total de exercitos
+            this.warMatch.getTotalArmiesToPlace()
+        })
+
+        eventsCenter.on(this.warMatch.turn.phasesNames[Phases.ATACAR],(msg: any)=>{
+            console.log(msg)
+            // console.log(this.warMatch)
+        })
+
+        eventsCenter.on(this.warMatch.turn.phasesNames[Phases.FORTIFICAR],(msg: any)=>{
+            console.log(msg)
+            // console.log(this.warMatch)
+        })
+
+        eventsCenter.on("territory-clicked", (territory:Territory) =>{
+            if(this.warMatch.turn.currentPhase === Phases.MOBILIZAR){
+                territory.mobilizar()
+            }else if(this.warMatch.turn.currentPhase === Phases.ATACAR){
+
+                this.warMatch.board.checkAttackCondition(
+                    territory, this.warMatch.getCurrentPlayer()
+                )
+                // this.warMatch.board.checkAttackCondition(
+                //     territory, this.warMatch.getCurrentPlayer()
+                // )
+                // console.log(this.warMatch.getCurrentPlayer(), territory)
+
+                // if(territory.owner.id === this.warMatch.turn.getCurrentPlayerId()){
+                //     console.log("É o seu terrtório")
+                //     territory.select()
+                //     territory.highlightNeighbours(this.warMatch.board.territories);
+                // }
+                // if (!this.warMatch.board.hasSelectedTerritory()){
+                //     this.warMatch.board.clearBoard()
+                //     territory.select()
+                //     territory.highlightNeighbours(this.warMatch.board.territories);
+                //     return
+                // }else if(territory.isSelected){
+                //     territory.unselect()
+                //     territory.unhighlightNeighbours(this.warMatch.board.territories);
+                //     return
+                // }else if(territory.isHighlighted && this.warMatch.board.getSelected()){
+                //     const selectedTerritory = this.warMatch.board.getSelected()
+                //     if(territory.isNeighbour(selectedTerritory)){
+                //         alert(`${selectedTerritory.owner?.name} está atacando com ${selectedTerritory.name} o território ${territory.name} de ${territory.owner?.name}`)
+                //         selectedTerritory.attack(territory)
+                //         return
+                //     }
+                //     console.log(territory.isNeighbour(selectedTerritory))
+                //     return
+                // }else {
+                //     alert("Movimento inválido")
+                // }
+            }
+        })
+
+        eventsCenter.on("next-phase", (player:GamePlayer) =>{
+            player.clearPlaced();
+        })
+
+        let players = [
+            {id: 1, name: 'Tiago', ia: 'false', color: 'black'},
+            {id: 2, name: 'Diogo', ia: 'false', color: 'blue'},
+            {id: 3, name: 'Julia', ia: 'false', color: 'red'},
+
+        ]
+        // this.scene.run("InitGameScene")
+        // eventsCenter.emit('init', players);
+
+        if(this.warMatch.init(players)){
+            this.scene.run("ShowUIScene",{warMatch: this.warMatch})
+        }
+        
     }
 
-    update(time: number, delta: number): void {
+    update(): void {
 
     }
 }

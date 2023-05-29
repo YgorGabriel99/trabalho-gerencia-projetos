@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 //import { createContadorImagem } from '/services/country.service';
-import {createContadorImagem} from './services/country-services.ts';
+// import {createContadorImagem} from './services/country-services.ts';
 /**
  * FirstGameScene is an example Phaser Scene
  * @class
@@ -41,10 +41,10 @@ export class FirstGameScene extends Phaser.Scene {
         let mapa = this.add.image(largura/2, altura/3, 'mapa');
         mapa.setScale(0.8);
 
-        createContadorImagem(this,485, 290);
-        createContadorImagem(this, 430, 290);
-        createContadorImagem(this, 430, 240);
-        createContadorImagem(this, 450, 340);
+        // createContadorImagem(this,485, 290);
+        // createContadorImagem(this, 430, 290);
+        // createContadorImagem(this, 430, 240);
+        // createContadorImagem(this, 450, 340);
         /*
         var brasil = this.add.image(485,290, 'circle')
         brasil.setScale(0.05,0.05)
