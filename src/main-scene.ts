@@ -136,7 +136,6 @@ export class MainGameScene extends Phaser.Scene {
             //FALTA O MÉTODO DE CÁLCULO DA TOTALIDADE!!!!!!
             //Calcular total de exercitos
             this.warMatch.getTotalArmiesToPlace()
-            // console.log(this.warMatch)
         })
 
         eventsCenter.on(this.warMatch.turn.phasesNames[Phases.ATACAR],(msg: any)=>{
@@ -152,6 +151,42 @@ export class MainGameScene extends Phaser.Scene {
         eventsCenter.on("territory-clicked", (territory:Territory) =>{
             if(this.warMatch.turn.currentPhase === Phases.MOBILIZAR){
                 territory.mobilizar()
+            }else if(this.warMatch.turn.currentPhase === Phases.ATACAR){
+
+                this.warMatch.board.checkAttackCondition(
+                    territory, this.warMatch.getCurrentPlayer()
+                )
+                // this.warMatch.board.checkAttackCondition(
+                //     territory, this.warMatch.getCurrentPlayer()
+                // )
+                // console.log(this.warMatch.getCurrentPlayer(), territory)
+
+                // if(territory.owner.id === this.warMatch.turn.getCurrentPlayerId()){
+                //     console.log("É o seu terrtório")
+                //     territory.select()
+                //     territory.highlightNeighbours(this.warMatch.board.territories);
+                // }
+                // if (!this.warMatch.board.hasSelectedTerritory()){
+                //     this.warMatch.board.clearBoard()
+                //     territory.select()
+                //     territory.highlightNeighbours(this.warMatch.board.territories);
+                //     return
+                // }else if(territory.isSelected){
+                //     territory.unselect()
+                //     territory.unhighlightNeighbours(this.warMatch.board.territories);
+                //     return
+                // }else if(territory.isHighlighted && this.warMatch.board.getSelected()){
+                //     const selectedTerritory = this.warMatch.board.getSelected()
+                //     if(territory.isNeighbour(selectedTerritory)){
+                //         alert(`${selectedTerritory.owner?.name} está atacando com ${selectedTerritory.name} o território ${territory.name} de ${territory.owner?.name}`)
+                //         selectedTerritory.attack(territory)
+                //         return
+                //     }
+                //     console.log(territory.isNeighbour(selectedTerritory))
+                //     return
+                // }else {
+                //     alert("Movimento inválido")
+                // }
             }
         })
 

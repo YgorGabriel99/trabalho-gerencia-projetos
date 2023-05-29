@@ -1,5 +1,6 @@
 import { WarMatch } from "../game/WarMatch";
 import PlayerType, { Player } from "./Player";
+import { Territory } from "./Territory";
 
 export enum playerCOLORS  {
     'black' = 0x4f4f4d,
@@ -28,6 +29,7 @@ export class GamePlayer extends Player{
     public armies
     public placed: Placed = {"all":0}
     public placeble: Placeble = {"all":0}
+    public gainedTerritory = false
     warMatch: WarMatch;
     
     // public ia: boolean;
@@ -88,6 +90,10 @@ export class GamePlayer extends Player{
             return true
         }
         return false
+    }
+
+    isOwner(territory: Territory){
+        return this.id === territory.owner?.id
     }
 
     resetPlaced(){

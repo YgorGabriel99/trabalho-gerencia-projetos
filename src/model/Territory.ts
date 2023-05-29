@@ -3,6 +3,7 @@ import { GamePlayer } from "./GamePlayer";
 
 export class Territory extends Phaser.GameObjects.Container {
     
+    
 
     public id: number;
     public owner?: GamePlayer;
@@ -44,7 +45,7 @@ export class Territory extends Phaser.GameObjects.Container {
     }
 
     hoverIn(){
-        this.highlight();
+        this.spriteTerritory.setAlpha(0.4)
     }
 
     hoverOut(){
@@ -160,4 +161,8 @@ export class Territory extends Phaser.GameObjects.Container {
         this.armies = 1;
     }
 
+    conquer(owner: GamePlayer | undefined, transfer: number) {
+        this.owner = owner;
+        this.armies = transfer;
+    }
 }
