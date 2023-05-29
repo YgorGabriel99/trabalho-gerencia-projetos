@@ -152,41 +152,13 @@ export class MainGameScene extends Phaser.Scene {
             if(this.warMatch.turn.currentPhase === Phases.MOBILIZAR){
                 territory.mobilizar()
             }else if(this.warMatch.turn.currentPhase === Phases.ATACAR){
-
                 this.warMatch.board.checkAttackCondition(
                     territory, this.warMatch.getCurrentPlayer()
                 )
-                // this.warMatch.board.checkAttackCondition(
-                //     territory, this.warMatch.getCurrentPlayer()
-                // )
-                // console.log(this.warMatch.getCurrentPlayer(), territory)
-
-                // if(territory.owner.id === this.warMatch.turn.getCurrentPlayerId()){
-                //     console.log("É o seu terrtório")
-                //     territory.select()
-                //     territory.highlightNeighbours(this.warMatch.board.territories);
-                // }
-                // if (!this.warMatch.board.hasSelectedTerritory()){
-                //     this.warMatch.board.clearBoard()
-                //     territory.select()
-                //     territory.highlightNeighbours(this.warMatch.board.territories);
-                //     return
-                // }else if(territory.isSelected){
-                //     territory.unselect()
-                //     territory.unhighlightNeighbours(this.warMatch.board.territories);
-                //     return
-                // }else if(territory.isHighlighted && this.warMatch.board.getSelected()){
-                //     const selectedTerritory = this.warMatch.board.getSelected()
-                //     if(territory.isNeighbour(selectedTerritory)){
-                //         alert(`${selectedTerritory.owner?.name} está atacando com ${selectedTerritory.name} o território ${territory.name} de ${territory.owner?.name}`)
-                //         selectedTerritory.attack(territory)
-                //         return
-                //     }
-                //     console.log(territory.isNeighbour(selectedTerritory))
-                //     return
-                // }else {
-                //     alert("Movimento inválido")
-                // }
+            }else if(this.warMatch.turn.currentPhase === Phases.FORTIFICAR){
+                this.warMatch.board.checkFortifyCondition(
+                    territory, this.warMatch.getCurrentPlayer()
+                )
             }
         })
 
@@ -196,8 +168,11 @@ export class MainGameScene extends Phaser.Scene {
 
         let players = [
             {id: 1, name: 'Tiago', ia: 'false', color: 'black'},
-            {id: 2, name: 'Diogo', ia: 'false', color: 'blue'},
-            {id: 3, name: 'Julia', ia: 'false', color: 'red'},
+            {id: 2, name: 'Paulo', ia: 'false', color: 'blue'},
+            {id: 3, name: 'Rafa', ia: 'false', color: 'red'},
+            {id: 4,name: "Ygor",ia: false,color: 'green'},
+            {id: 5,name: "Thali",ia: false,color: 'yellow'},
+            {id: 6,name: "Edu",ia: false,color: 'pink'}
 
         ]
         // this.scene.run("InitGameScene")

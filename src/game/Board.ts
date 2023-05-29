@@ -1,18 +1,32 @@
 import { GamePlayer } from "../model/GamePlayer";
 import { Territory } from "../model/Territory";
+import Graph from "../services/Graph";
 import Util from "../services/Util";
 
 export class Board {
-
-    
-
     public territories: Array<Territory> = [];
+    public territoriesGraph: Graph;
     public territoryCards: number[] = [];
     public objectiveCards: number[] = [];
 
     init(territoryIds: number[]) {
         this.setInitialTerritoryCards(territoryIds)
         this.shuffleTerritorieyCards();
+        this.territoriesGraph = new Graph();
+        this.setupGraph();
+    }
+
+    setupGraph() {
+        // let result = []
+        this.territories.forEach(territory => {
+            this.territoriesGraph.addVertex(territory.id)
+            territory.neighbors.forEach(neighbor => {
+                this.territoriesGraph.addEdge(
+                    territory.id, neighbor
+                )
+            })
+        })
+        console.log(this.territoriesGraph)
     }
 
     getTerritoryById(id: number){
@@ -140,5 +154,30 @@ export class Board {
         return results.sort((a,b)=> b - a)
     }
 
+    checkFortifyCondition(territory: Territory, player: GamePlayer | undefined) {
+        if(territory.isHighlighted){
+            let origin = this.getSelected()
+            this.fortify(origin, territory)
+        }else if(territory.owner?.id === player?.id){
+            this.clearBoard()
+            territory.select()
+            territory.highlightOwnedNeighbors(this.territories)
+        }else if(this.hasSelectedTerritory()){
+            console.log("Movimento inválido")
+        }
+    }
+
+    fortify(origin: Territory, destiny: Territory) {
+        if(origin.armies > 1){
+            origin.unplaceArmies(1);
+            destiny.placeArmies(1);
+            console.log("alocando")
+            this.clearBoard();
+        }else{
+            console.log("Movimento inválido")
+        }
+    }
+
+    
 
 }

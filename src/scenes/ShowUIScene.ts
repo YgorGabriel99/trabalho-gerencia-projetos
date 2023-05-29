@@ -21,7 +21,6 @@ export default class ShowUIScene extends Phaser.Scene {
     init(data: { warMatch: WarMatch; }){
         let {warMatch} = data;
         this.warMatch = warMatch;
-        console.log(warMatch.getCurrentPlayer()?.totalTerritories);
     }
 
     destroyUI(){

@@ -2,8 +2,6 @@ import eventsCenter from "../services/EventsCenter";
 import { GamePlayer } from "./GamePlayer";
 
 export class Territory extends Phaser.GameObjects.Container {
-    
-    
 
     public id: number;
     public owner?: GamePlayer;
@@ -164,5 +162,28 @@ export class Territory extends Phaser.GameObjects.Container {
     conquer(owner: GamePlayer | undefined, transfer: number) {
         this.owner = owner;
         this.armies = transfer;
+    }
+
+    highlightOwnedNeighbors(territories: Territory[]) {
+        const queue = [this.slug];
+        const result = [];
+        const visited = {};
+        visited[this.slug] = true;
+        let currentVertex;
+        while (queue.length) {
+            currentVertex = queue.shift();
+            // console.log(currentVertex);
+            result.push(currentVertex);
+            let currentTerritory = territories.find(territory => (territory.slug === currentVertex))
+            currentTerritory.neighbors.forEach(neighborId => {
+                let neighbor = territories.find(territory =>(neighborId === territory.id))
+                if(!visited[neighbor?.slug] && neighbor?.owner === this.owner){
+                    visited[neighbor?.slug] = true;
+                    neighbor?.highlight()
+                    queue.push(neighbor.slug)
+                }
+            })
+        };
+        console.log(result)
     }
 }
