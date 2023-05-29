@@ -8,7 +8,9 @@ export class TerritoryFactory{
     const territoriosData = scene.cache.json.get('frame').frames;
     territories.forEach((territory: {
         slug: string;
-        name: string; id: number; neighbors: number[]
+        name: string; id: number; 
+        neighbors: number[];
+        continent: number
         }) => {
             let territorio = new Territory(
                 {

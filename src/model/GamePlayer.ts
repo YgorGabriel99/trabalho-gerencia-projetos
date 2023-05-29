@@ -12,12 +12,18 @@ export enum playerCOLORS  {
 }
 
 export interface Placeble{
-    "all": number
+    "all": number,
+    "south-america": number,
+    "asia": number,
+    "oceania": number,
+    "africa": number,
+    "north-america": number,
+    "europe": number
 }
 
-export interface Placed {
-    "all": number
-}
+// export interface Placed {
+//     "all": number
+// }
 
 export class GamePlayer extends Player{
     
@@ -27,8 +33,23 @@ export class GamePlayer extends Player{
     public totalTerritories: number;
     public playerText: Phaser.GameObjects.Text;
     public armies
-    public placed: Placed = {"all":0}
-    public placeble: Placeble = {"all":0}
+    public placed: Placeble = {
+        "all":0, "south-america":0,    
+        "asia": 0,
+        "oceania": 0,
+        "africa": 0,
+        "north-america": 0,
+        "europe": 0
+    }
+    public placeble: Placeble = {
+        "all":0, 
+        "south-america":0,    
+        "asia": 0,
+        "oceania": 0,
+        "africa": 0,
+        "north-america": 0,
+        "europe": 0
+    }
     public gainedTerritory = false
     warMatch: WarMatch;
     
@@ -86,10 +107,11 @@ export class GamePlayer extends Player{
     }
 
     hasArmiesToPlace(){
-        if(this.placeble.all > 0){
-            return true
-        }
-        return false
+        let placesToPlace = Object.keys(this.placeble).filter(key => {
+            return this.placeble[key] > 0
+        }).length
+        
+        return placesToPlace > 0
     }
 
     isOwner(territory: Territory){

@@ -184,21 +184,21 @@ export class Board {
     checkTotality(player: GamePlayer | undefined) {
         Object.keys(this.continents).forEach(key => {
             if(this.hasTotality(player, key)){
-                player?.setPlaceble([this.continents[key].slug], this.continents[key].totality)
+                player?.setPlaceble(this.continents[key].slug, this.continents[key].totality)
                 console.log(player?.placeble)
             }
         })
     }
 
     hasTotality(player:GamePlayer, continent) {
-        console.log(this.continents[continent].slug)
+        // console.log(this.continents[continent].slug)
         let totalTerritoriesInContinent = this.territories.filter(territory =>{
             return territory.continent === parseInt(continent)
         }).length
         let totalPlayerTerritoriesInContinent = this.getPlayerTerritories(player).filter(territory =>{
             return territory.continent === parseInt(continent)
         }).length
-        console.log(totalTerritoriesInContinent, totalPlayerTerritoriesInContinent)
+        // console.log(totalTerritoriesInContinent, totalPlayerTerritoriesInContinent)
         return totalTerritoriesInContinent === totalPlayerTerritoriesInContinent
     }
 

@@ -52,20 +52,20 @@ export class Territory extends Phaser.GameObjects.Container {
         this.updateTint();
     }
 
-    mobilizar() {
-        
+    mobilize(continents) {
+        let continentSlug = continents[this.continent].slug
         if(this.owner?.isCurrentPlayer() && this.owner.hasArmiesToPlace()){
-            this.placeArmies(1);
-            this.owner.placeArmie("all",1)
+            if(this.owner.placeble[continentSlug] > 0){
+                this.placeArmies(1);
+                this.owner.placeArmie(continentSlug , 1)
+            }else if(this.owner.placeble["all"] > 0){
+                this.placeArmies(1);
+                this.owner.placeArmie("all",1)
+            }
         }
-        // else{
-        //     this.unplaceArmies(1)
-        //     this.owner?.unplaceArmie("all",1)
-        // }
         eventsCenter.emit("armies-placed")
     }
 
-    
     changeSelected():void{
         this.isSelected = !this.isSelected
     }

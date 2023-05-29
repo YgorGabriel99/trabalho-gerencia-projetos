@@ -95,7 +95,7 @@ export class MainGameScene extends Phaser.Scene {
 
         eventsCenter.on("territory-clicked", (territory:Territory) =>{
             if(this.warMatch.turn.currentPhase === Phases.MOBILIZAR){
-                territory.mobilizar()
+                territory.mobilize(this.warMatch.board.continents)
             }else if(this.warMatch.turn.currentPhase === Phases.ATACAR){
                 this.warMatch.board.checkAttackCondition(
                     territory, this.warMatch.getCurrentPlayer()

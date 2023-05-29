@@ -69,11 +69,17 @@ export default class ShowUIScene extends Phaser.Scene {
     }
 
     updateArmies(){
-        let placedArmies = this.warMatch.turn.getCurrentPlayer(this.warMatch.players)?.placed["all"]
-        let placebleArmies = this.warMatch.turn.getCurrentPlayer(this.warMatch.players)?.placeble["all"]
-        this.displayMessage.setText(
-            `Exércitos Disponíveis: ${placebleArmies} Exércitos alocados: ${placedArmies}`
-        )
+        // let placedArmies = this.warMatch.turn.getCurrentPlayer(this.warMatch.players)?.placed["all"]
+        // let placebleArmies = this.warMatch.turn.getCurrentPlayer(this.warMatch.players)?.placeble["all"]
+        // this.displayMessage.setText(
+        //     `Exércitos Disponíveis: ${placebleArmies} Exércitos alocados: ${placedArmies}`
+        // )
+        let player = this.warMatch.getCurrentPlayer()
+
+        // console.log(this.warMatch.getCurrentPlayer())
+        Object.keys(this.warMatch.getCurrentPlayer()?.placeble).forEach(key =>{
+            this.displayMessage.text += key + ': ' + player?.placeble[key] + ' - '
+        })        
     }
 
     create(){
