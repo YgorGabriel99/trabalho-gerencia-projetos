@@ -73,12 +73,12 @@ export class WarMatch{
 
     init(players: PlayerType[]):boolean {
 
-        // if(players.length < 3){
-        //     let msg = "Deve haver pelo menos três jogadores"
-        //     eventsCenter.emit('restart', msg)
-        //     eventsCenter.emit('showModal', msg)
-        //     return false
-        // }
+        if(players.length < 3){
+            let msg = "Deve haver pelo menos três jogadores"
+            eventsCenter.emit('restart', msg)
+            eventsCenter.emit('showModal', msg)
+            return false
+        }
         
         players.forEach((player: PlayerType) =>{
             this.addPlayer(new GamePlayer(player, playerCOLORS[player.color], this))
@@ -93,7 +93,7 @@ export class WarMatch{
             return territory.id;
         })
         this.board.setTerritories(TerritoryFactory.loadCountries(this.scene))
-        this.board.init(territoryIds)
+        this.board.init(territoryIds, this.scene.continentsData)
 
         this.shufflePlayerInBoard()
         eventsCenter.emit(this.turn.phasesNames[Phases.MOBILIZAR],this.turn.phasesNames[Phases.MOBILIZAR])
@@ -104,7 +104,7 @@ export class WarMatch{
         let player = this.getCurrentPlayer()
         this.setPlayerTotalTerritories(player)
         player?.setPlaceble("all", Math.max(Math.floor(player.totalTerritories/2), 3))
-        
+        this.board.checkTotality(player)
 
 
         // let general = game.getPlayerTerritoriesCount(player)

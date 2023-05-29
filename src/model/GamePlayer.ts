@@ -96,7 +96,11 @@ export class GamePlayer extends Player{
         return this.id === territory.owner?.id
     }
 
-    resetPlaced(){
-        this.placed.all = 0
+    // resetPlaced(){
+    //     this.placed.all = 0
+    // }
+
+    resetPlaces(){
+        
     }
 }

@@ -4,17 +4,21 @@ import Graph from "../services/Graph";
 import Util from "../services/Util";
 
 export class Board {
+
     public territories: Array<Territory> = [];
+    public continents = {};
     public territoriesGraph: Graph;
     public territoryCards: number[] = [];
     public objectiveCards: number[] = [];
 
-    init(territoryIds: number[]) {
+    init(territoryIds: number[], continents) {
         this.setInitialTerritoryCards(territoryIds)
         this.shuffleTerritorieyCards();
+        this.continents = continents
         this.territoriesGraph = new Graph();
         this.setupGraph();
     }
+
 
     setupGraph() {
         // let result = []
@@ -26,7 +30,6 @@ export class Board {
                 )
             })
         })
-        console.log(this.territoriesGraph)
     }
 
     getTerritoryById(id: number){
@@ -178,6 +181,32 @@ export class Board {
         }
     }
 
-    
+    checkTotality(player: GamePlayer | undefined) {
+        Object.keys(this.continents).forEach(key => {
+            if(this.hasTotality(player, key)){
+                player?.setPlaceble([this.continents[key].slug], this.continents[key].totality)
+                console.log(player?.placeble)
+            }
+        })
+    }
 
+    hasTotality(player:GamePlayer, continent) {
+        console.log(this.continents[continent].slug)
+        let totalTerritoriesInContinent = this.territories.filter(territory =>{
+            return territory.continent === parseInt(continent)
+        }).length
+        let totalPlayerTerritoriesInContinent = this.getPlayerTerritories(player).filter(territory =>{
+            return territory.continent === parseInt(continent)
+        }).length
+        console.log(totalTerritoriesInContinent, totalPlayerTerritoriesInContinent)
+        return totalTerritoriesInContinent === totalPlayerTerritoriesInContinent
+    }
+
+    getPlayerTerritories(player:GamePlayer){
+        
+        const territoriesOwned =  this.territories.filter((territory) =>{
+            return territory.owner?.id === player.id
+        })
+        return territoriesOwned
+    }
 }

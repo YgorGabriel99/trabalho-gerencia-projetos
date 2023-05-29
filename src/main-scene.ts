@@ -25,6 +25,7 @@ export class MainGameScene extends Phaser.Scene {
 
     public warMatch!: WarMatch;
     public inputKeys: object;
+    continentsData: any;
     constructor() {
         super('MainGameScene');
         
@@ -42,73 +43,17 @@ export class MainGameScene extends Phaser.Scene {
         // //Carregando dados do mapa
         this.load.json('frame', 'assets/images/mapa_war.json');
         this.load.json('territories', 'assets/data/territories.json');
+        this.load.json('continents', 'assets/data/continents.json');
         
     }
     
     create(): void {
-
+        this.continentsData = this.cache.json.get('continents').continents;
+  
         this.warMatch = new WarMatch(new Board(), new Turn(), this);
        
-        // this.warMatch.shufflePlayerInBoard()
-        
-        // this.warMatch.getPlayerTotalTerritories(this.warMatch.players[0])
-
-        // this.warMatch.showPlayers(this)
-
-        /* this.input.on('gameobjectover', (pointer:Phaser.Input.Pointer, territory:Territory) =>
-        {
-            if(!this.warMatch.board.hasSelectedTerritory()){
-                // console.log(territory)
-                territory.highlight();
-            }
-        });
-
-        this.input.on('gameobjectout', (pointer:Phaser.Input.Pointer,  territory:Territory) =>
-        {
-            if(!this.warMatch.board.hasSelectedTerritory()){
-                territory.updateTint();
-            }
-            
-        });
-
-        this.input.on('gameobjectdown', (pointer:Phaser.Input.Pointer, territory:Territory) =>{
-
-            if (!this.warMatch.board.hasSelectedTerritory()){
-                this.warMatch.board.clearBoard()
-                territory.select()
-                territory.highlightNeighbours(this.warMatch.board.territories);
-                return
-            }else if(territory.isSelected){
-                territory.unselect()
-                territory.unhighlightNeighbours(this.warMatch.board.territories);
-                return
-            }else if(territory.isHighlighted && this.warMatch.board.getSelected()){
-                const selectedTerritory = this.warMatch.board.getSelected()
-                if(territory.isNeighbour(selectedTerritory)){
-                    alert(`${selectedTerritory.owner?.name} está atacando com ${selectedTerritory.name} o território ${territory.name} de ${territory.owner?.name}`)
-                    selectedTerritory.attack(territory)
-                    return
-                }
-                console.log(territory.isNeighbour(selectedTerritory))
-                return
-            }else {
-                alert("Movimento inválido")
-            }
-        }) */
         this.add.bitmapText(10,10,'pressstart','WAR')
-
-        // let players = [
-        //     {id: 1,name: "Tiago",ia: false,color: 'black'},
-        //     {id: 2,name: "Diogo",ia: false,color: 'blue'},
-        //     {id: 3,name: "Julia",ia: false,color: 'red'},
-        //     {id: 4,name: "Gaaby",ia: false,color: 'green'},
-        //     {id: 5,name: "Baarb",ia: false,color: 'yellow'},
-        //     {id: 6,name: "Lucca",ia: false,color: 'pink'}
-        // ]
-        
-        
-
-
+      
         //Eventos
         eventsCenter.on("init", (players: PlayerType[]) => {
             if(this.warMatch.init(players)){

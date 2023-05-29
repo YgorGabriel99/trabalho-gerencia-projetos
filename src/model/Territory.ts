@@ -14,8 +14,9 @@ export class Territory extends Phaser.GameObjects.Container {
     public neighbors: number[];
     public isSelected: boolean = false;
     public isHighlighted:boolean = false;
+    public continent: number;
     constructor(data: any) {
-        let {id, name, slug, armies, scene, x, y, spriteSource, neighbors} = data;
+        let {id, name, slug, armies, scene, x, y, spriteSource, neighbors, continent} = data;
         let spriteTerritory = new Phaser.GameObjects.Sprite(scene, 0, 0, 'territorios', slug).setOrigin(0)
         .setDepth(-1).setAlpha(0.85)
         let textX = spriteSource['x'] + spriteSource['w']/2
@@ -29,6 +30,7 @@ export class Territory extends Phaser.GameObjects.Container {
         this.spriteTerritory = spriteTerritory;
         this.armiesText = armiesText;
         this.neighbors = neighbors;
+        this.continent = continent
         this.id = id;
         this.slug = slug;
         this.armies = armies;
