@@ -13,10 +13,11 @@ export default class PreloadScene extends Phaser.Scene{
         this.load.bitmapFont('pressstart', 'assets/fonts/pressstart.png','assets/fonts/pressstart.fnt') 
         
         // //Carregando dados do mapa
-        // let data = 
         this.load.json('frame', 'assets/images/mapa_war.json');
         this.load.json('territories', 'assets/data/territories.json');
-        // console.log(territories)
+        this.load.json('continents', 'assets/data/continents.json');
+        this.load.json('cards', 'assets/data/cards.json');
+
     }
 
     create(){

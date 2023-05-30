@@ -1,4 +1,5 @@
 import { WarMatch } from "../game/WarMatch";
+import { Card } from "../model/Card";
 import eventsCenter from "../services/EventsCenter";
 export default class ShowUIScene extends Phaser.Scene {
     public warMatch: WarMatch;
@@ -8,6 +9,7 @@ export default class ShowUIScene extends Phaser.Scene {
     finishPhaseButton: Phaser.GameObjects.Text;
     displayPhase: Phaser.GameObjects.Text;
     displayMessage: Phaser.GameObjects.Text;
+    cards: Card[];
 
 
     constructor() {
@@ -28,6 +30,13 @@ export default class ShowUIScene extends Phaser.Scene {
     }
 
     refresh(){
+        if(this.cards){
+            this.cards.forEach(card => {
+                card.destroy()
+            });
+        }
+
+        let currentPlayer = this.warMatch.getCurrentPlayer()
         
         // this.displayMessage.destroy()
         let counter = 0;
@@ -56,7 +65,7 @@ export default class ShowUIScene extends Phaser.Scene {
 
         //Eventos
         this.finishPhaseButton.on("pointerdown", () =>{
-            eventsCenter.emit("next-phase",this.warMatch.getCurrentPlayer())
+            eventsCenter.emit("next-phase",currentPlayer)
             this.nextPhase()
         })
 
@@ -66,6 +75,10 @@ export default class ShowUIScene extends Phaser.Scene {
         this.finishPhaseButton.on("pointerout", () =>{
             this.finishPhaseButton.setAlpha(1)
         })
+
+
+        this.cards = this.warMatch.board.showHand(300, 350  , currentPlayer, this)
+        
     }
 
     updateArmies(){

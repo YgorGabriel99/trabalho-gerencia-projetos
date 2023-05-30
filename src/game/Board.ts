@@ -1,3 +1,4 @@
+import { Card } from "../model/Card";
 import { GamePlayer } from "../model/GamePlayer";
 import { Territory } from "../model/Territory";
 import Graph from "../services/Graph";
@@ -7,14 +8,18 @@ export class Board {
 
     public territories: Array<Territory> = [];
     public continents = {};
+    public cardFigures = {}
     public territoriesGraph: Graph;
     public territoryCards: number[] = [];
     public objectiveCards: number[] = [];
+    public deck: number[] = [];
+    public discard: number[] = [];
 
-    init(territoryIds: number[], continents) {
+    init(territoryIds: number[], continents, cardFigures) {
         this.setInitialTerritoryCards(territoryIds)
-        this.shuffleTerritorieyCards();
+        this.shuffleTerritoryCards();
         this.continents = continents
+        this.cardFigures = cardFigures
         this.territoriesGraph = new Graph();
         this.setupGraph();
     }
@@ -37,11 +42,48 @@ export class Board {
     }
 
 
-    shuffleTerritorieyCards() {
+    shuffleTerritoryCards() {
         this.territoryCards = Util.shuffle(
             this.territoryCards
         )
     }
+
+    shuffleDeck(){
+        this.deck = Util.shuffle(
+            this.deck
+        )
+    }
+
+    reshuffleDeck(){
+        this.deck = this.discard
+        this.discard = []
+        this.deck.push(0)
+        this.deck.push(0)
+        this.deck.push(0)
+        this.shuffleDeck()
+    }
+
+    drawCard(player: GamePlayer) {
+        player.hand.push(this.deck.pop())
+        player.gainedTerritory = false
+    }
+
+    showHand(x:number, y:number, player: GamePlayer, scene:Phaser.Scene) {
+        let hand = []
+        player.hand.forEach((cardId, index) =>{
+            let territory = this.getTerritoryById(cardId)
+            let card = new Card({
+                x: x + (40 * index),
+                y,
+                scene,
+                territory,
+                continent: this.continents[territory?.continent]
+            })
+            hand.push(card);
+        })
+        return hand
+    }
+
 
     public setTerritories(territories: Array<Territory>):void{
         this.territories = territories
@@ -132,7 +174,7 @@ export class Board {
             attacker.armies -= transfer
             defender.conquer(attacker.owner, transfer)
             attacker.owner.gainedTerritory = true
-            // player.gainedTerritory = true
+            // attacker.owner.gainedTerritory = true
         }
         this.clearBoard()
     }
@@ -209,4 +251,6 @@ export class Board {
         })
         return territoriesOwned
     }
+
+    
 }

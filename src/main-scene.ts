@@ -26,6 +26,7 @@ export class MainGameScene extends Phaser.Scene {
     public warMatch!: WarMatch;
     public inputKeys: object;
     continentsData: any;
+    cardsData: any;
     constructor() {
         super('MainGameScene');
         
@@ -43,12 +44,13 @@ export class MainGameScene extends Phaser.Scene {
         // //Carregando dados do mapa
         this.load.json('frame', 'assets/images/mapa_war.json');
         this.load.json('territories', 'assets/data/territories.json');
-        this.load.json('continents', 'assets/data/continents.json');
+        // this.load.json('continents', 'assets/data/continents.json');
         
     }
     
     create(): void {
         this.continentsData = this.cache.json.get('continents').continents;
+        this.cardsData = this.cache.json.get('cards').cards;
   
         this.warMatch = new WarMatch(new Board(), new Turn(), this);
        
@@ -111,6 +113,13 @@ export class MainGameScene extends Phaser.Scene {
             player.clearPlaced();
         })
 
+        eventsCenter.on("next-turn" , () =>{
+            if(this.warMatch.getCurrentPlayer()?.gainedTerritory){
+                this.warMatch.board.drawCard(this.warMatch.getCurrentPlayer())
+            }
+            console.log(this.warMatch.getCurrentPlayer())
+        })
+
         let players = [
             {id: 1, name: 'Tiago', ia: 'false', color: 'black'},
             {id: 2, name: 'Paulo', ia: 'false', color: 'blue'},
@@ -126,6 +135,7 @@ export class MainGameScene extends Phaser.Scene {
         if(this.warMatch.init(players)){
             this.scene.run("ShowUIScene",{warMatch: this.warMatch})
         }
+        console.log(this.warMatch)
         
     }
 

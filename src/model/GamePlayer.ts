@@ -50,7 +50,8 @@ export class GamePlayer extends Player{
         "north-america": 0,
         "europe": 0
     }
-    public gainedTerritory = false
+    public gainedTerritory = false;
+    public hand: number[] = []
     warMatch: WarMatch;
     
     // public ia: boolean;

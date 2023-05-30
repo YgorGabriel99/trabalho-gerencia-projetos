@@ -39,6 +39,7 @@ export class WarMatch{
     shufflePlayerInBoard(): void {
         this.board.territoryCards.forEach((territoryCard) =>{
             let territory = this.board.getTerritoryById(territoryCard)
+            this.board.discard.push(territoryCard)
             let player = this.getPlayerById(this.turn.getCurrentPlayerId())
             territory?.setOwner(player)
             territory?.setInitialArmies()
@@ -93,9 +94,10 @@ export class WarMatch{
             return territory.id;
         })
         this.board.setTerritories(TerritoryFactory.loadCountries(this.scene))
-        this.board.init(territoryIds, this.scene.continentsData)
+        this.board.init(territoryIds, this.scene.continentsData, this.scene.cardsData)
 
         this.shufflePlayerInBoard()
+        this.board.reshuffleDeck()
         eventsCenter.emit(this.turn.phasesNames[Phases.MOBILIZAR],this.turn.phasesNames[Phases.MOBILIZAR])
         return true
     }
