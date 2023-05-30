@@ -59,7 +59,6 @@ export class MainGameScene extends Phaser.Scene {
         //Eventos
         eventsCenter.on("init", (players: PlayerType[]) => {
             if(this.warMatch.init(players)){
-                console.log(players)
                 this.scene.stop("InitGameScene")
                 this.scene.run("ShowUIScene",{warMatch: this.warMatch})
             }else{
@@ -80,19 +79,18 @@ export class MainGameScene extends Phaser.Scene {
         })
 
         eventsCenter.on(this.warMatch.turn.phasesNames[Phases.MOBILIZAR],(msg: any)=>{
-            //FALTA O MÉTODO DE CÁLCULO DA TOTALIDADE!!!!!!
             //Calcular total de exercitos
             this.warMatch.getTotalArmiesToPlace()
+
+                                    
         })
 
         eventsCenter.on(this.warMatch.turn.phasesNames[Phases.ATACAR],(msg: any)=>{
-            console.log(msg)
-            // console.log(this.warMatch)
+            
         })
 
         eventsCenter.on(this.warMatch.turn.phasesNames[Phases.FORTIFICAR],(msg: any)=>{
-            console.log(msg)
-            // console.log(this.warMatch)
+            
         })
 
         eventsCenter.on("territory-clicked", (territory:Territory) =>{
@@ -117,7 +115,6 @@ export class MainGameScene extends Phaser.Scene {
             if(this.warMatch.getCurrentPlayer()?.gainedTerritory){
                 this.warMatch.board.drawCard(this.warMatch.getCurrentPlayer())
             }
-            console.log(this.warMatch.getCurrentPlayer())
         })
 
         let players = [
@@ -135,7 +132,6 @@ export class MainGameScene extends Phaser.Scene {
         if(this.warMatch.init(players)){
             this.scene.run("ShowUIScene",{warMatch: this.warMatch})
         }
-        console.log(this.warMatch)
         
     }
 

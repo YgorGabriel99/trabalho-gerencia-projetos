@@ -12,6 +12,7 @@ enum Status {
     FINISHED = 2
 }
 export class WarMatch{
+
     public scene: Phaser.Scene;
     public players: Array<GamePlayer> = [];
     public turn: Turn;
@@ -98,6 +99,12 @@ export class WarMatch{
 
         this.shufflePlayerInBoard()
         this.board.reshuffleDeck()
+        // this.getCurrentPlayer()?.hand.push(Math.round(Math.random()*41)+1)
+        // this.getCurrentPlayer()?.hand.push(Math.round(Math.random()*41)+1)
+        // this.getCurrentPlayer()?.hand.push(Math.round(Math.random()*41)+1)
+        // this.getCurrentPlayer()?.hand.push(Math.round(Math.random()*41)+1)
+        // this.getCurrentPlayer()?.hand.push(Math.round(Math.random()*41)+1)
+
         eventsCenter.emit(this.turn.phasesNames[Phases.MOBILIZAR],this.turn.phasesNames[Phases.MOBILIZAR])
         return true
     }
@@ -115,5 +122,33 @@ export class WarMatch{
 
     getCurrentPlayer(){
         return this.turn.getCurrentPlayer(this.players)
+    }
+
+    hasConditionToNextPhase() :boolean{
+        //Mobilizar
+        switch (this.turn.currentPhase) {
+            case Phases.MOBILIZAR:
+                 //Mao maior que 5
+                let handSize = this.getCurrentPlayer().hand.length === 5
+                //Existe exercito para alocar
+                let hasArmiesToPlace = this.getCurrentPlayer()?.hasArmiesToPlace()
+                if(handSize || hasArmiesToPlace){
+                    return false
+                }else{
+                    return true
+                }
+                break;
+            case Phases.ATACAR:
+                console.log(this.turn.getCurrentPhaseName())
+                return true
+                break;
+            case Phases.FORTIFICAR:
+                console.log(this.turn.getCurrentPhaseName())
+                return true
+                break;
+            default:
+                break;
+        }
+
     }
 }

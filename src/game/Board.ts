@@ -1,10 +1,23 @@
 import { Card } from "../model/Card";
 import { GamePlayer } from "../model/GamePlayer";
+import { Player } from "../model/Player";
 import { Territory } from "../model/Territory";
 import Graph from "../services/Graph";
 import Util from "../services/Util";
 
+const exchangeTable = {
+    "1": 4,
+    "2": 2,
+    "3": 2,
+    "4": 2,
+    "5": 2,
+    "6": 3,
+    "all": 5
+}
+
 export class Board {
+   
+
 
     public territories: Array<Territory> = [];
     public continents = {};
@@ -14,6 +27,8 @@ export class Board {
     public objectiveCards: number[] = [];
     public deck: number[] = [];
     public discard: number[] = [];
+    public exchangeNumber: number = 1;
+    public exchangeArmies: number = exchangeTable[this.exchangeNumber];
 
     init(territoryIds: number[], continents, cardFigures) {
         this.setInitialTerritoryCards(territoryIds)
@@ -57,9 +72,6 @@ export class Board {
     reshuffleDeck(){
         this.deck = this.discard
         this.discard = []
-        this.deck.push(0)
-        this.deck.push(0)
-        this.deck.push(0)
         this.shuffleDeck()
     }
 
@@ -86,6 +98,43 @@ export class Board {
         return hand
     }
 
+    exchangeCards(currentPlayer: GamePlayer | undefined, cards: Territory[]) {
+        //Checar se tem cards selecionados e se são no máximo 3
+        if(!cards || cards.length != 3){
+            console.log("Devem ser selecionadas três cartas")
+            return false
+        }else if(this.checkExchangeCondition(cards)){
+            currentPlayer?.addPlaceble("all", this.exchangeArmies)
+            this.dropCards(currentPlayer, cards)
+            this.exchangeNumber++;
+            if(exchangeTable[this.exchangeNumber]){
+                this.exchangeArmies += exchangeTable[this.exchangeNumber]
+            }else{
+                this.exchangeArmies += exchangeTable.all
+            }
+            return true
+        }
+    }
+
+    checkExchangeCondition(cards: Territory[]):boolean {
+        let equalCondition = (cards[0].card === cards[1].card && cards[1].card ===cards[2].card && cards[0].card === cards[2].card)
+        let diferentCondition = (cards[0].card !== cards[1].card && cards[1].card !==cards[2].card && cards[0].card !== cards[2].card)
+        if(equalCondition || diferentCondition){
+            return true
+        }
+        return false
+    }    
+
+    dropCards(player: GamePlayer, cards: Territory[]){
+        cards.forEach(card => this.discard.push(card.id));
+        // this.discard = cards
+        cards.forEach(card => {
+            if(card.owner === player){
+                card.placeArmies(2)
+            }
+            player.hand.splice(player.hand.indexOf(card.id),1)            
+        })
+    }
 
     public setTerritories(territories: Array<Territory>):void{
         this.territories = territories
@@ -160,11 +209,8 @@ export class Board {
     attack(attacker: Territory, defender: Territory){
         let attackQuantity = Math.min(attacker.armies - 1, 3)
         let defenseQuantity = Math.min(defender.armies, 3)
-        // console.log(attacker.name, attackQuantity, defender.name, defenseQuantity)
-        // console.log("Attacking")
         let attackResult = this.playDices(attackQuantity)
         let defenseResult = this.playDices(defenseQuantity)
-        console.log(attackResult, defenseResult)
         let combatResult = this.checkAttackResults(attackResult, defenseResult)
 
         attacker.armies -= combatResult[0]
@@ -218,7 +264,6 @@ export class Board {
         if(origin.armies > 1){
             origin.unplaceArmies(1);
             destiny.placeArmies(1);
-            console.log("alocando")
             this.clearBoard();
         }else{
             console.log("Movimento inválido")
@@ -235,14 +280,12 @@ export class Board {
     }
 
     hasTotality(player:GamePlayer, continent) {
-        // console.log(this.continents[continent].slug)
         let totalTerritoriesInContinent = this.territories.filter(territory =>{
             return territory.continent === parseInt(continent)
         }).length
         let totalPlayerTerritoriesInContinent = this.getPlayerTerritories(player).filter(territory =>{
             return territory.continent === parseInt(continent)
         }).length
-        // console.log(totalTerritoriesInContinent, totalPlayerTerritoriesInContinent)
         return totalTerritoriesInContinent === totalPlayerTerritoriesInContinent
     }
 

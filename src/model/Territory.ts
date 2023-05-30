@@ -177,7 +177,6 @@ export class Territory extends Phaser.GameObjects.Container {
         let currentVertex;
         while (queue.length) {
             currentVertex = queue.shift();
-            // console.log(currentVertex);
             result.push(currentVertex);
             let currentTerritory = territories.find(territory => (territory.slug === currentVertex))
             currentTerritory.neighbors.forEach(neighborId => {

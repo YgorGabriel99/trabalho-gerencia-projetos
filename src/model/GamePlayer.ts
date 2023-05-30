@@ -87,6 +87,10 @@ export class GamePlayer extends Player{
         this.placeble[type] = quantity;
     }
 
+    addPlaceble(type:string, quantity:number){
+        this.placeble[type] += quantity;
+    }
+
     placeArmie(type:string, quantity:number){
         if(this.hasArmiesToPlace()){
             this.placeble[type] -= quantity;

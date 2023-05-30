@@ -1,6 +1,8 @@
 export class Card extends Phaser.GameObjects.Container {
     public isSelected: boolean = false;
-    cardRectangle: Phaser.GameObjects.Rectangle;
+    public cardRectangle: Phaser.GameObjects.Rectangle;
+    public territory: any;
+    public id: number;
 
     constructor(data: any) {
         let {x,y, scene, card, territory, continent} = data
@@ -21,11 +23,11 @@ export class Card extends Phaser.GameObjects.Container {
         super(scene, x, y, [cardRectangle, continentText, figureText, territoryText,])
         this.setScale(0.5)
         this.cardRectangle = cardRectangle
+        this.territory = territory
+        this.id = territory.id
 
         cardRectangle.setInteractive({ useHandCursor: true  })
         cardRectangle.on("pointerover",(pointer, object)=>{
-            console.log("x",pointer.x, object)
-            console.log("y",pointer.y, object)
             this.scene.tweens.add({
                 targets: this,
                 props: {
@@ -56,18 +58,14 @@ export class Card extends Phaser.GameObjects.Container {
         })
 
         this.scene.add.existing(this)
-        
-
     }
 
     select(){
         if(this.isSelected){
-            this.cardRectangle.setStrokeStyle(5, 0xFFFFFFFF)
-        }else{
             this.cardRectangle.setStrokeStyle(0, 0xFFFFFFFF)
+        }else{
+            this.cardRectangle.setStrokeStyle(5, 0xFFFFFFFF)
         }
         this.isSelected = !this.isSelected
     }
-
-
 }

@@ -20,9 +20,7 @@ export default class InitGameScene extends Phaser.Scene{
             let players: PlayerType[] = [];
             
             for(let i = 1; i < 7; i++) {
-                // console.log(formData.get(`player${i}.name`))
                 if(formData.get(`player${i}.name`) !== "") {
-                    // console.log(formData.get(`player${i}.name`))
                     let player:PlayerType = {
                         id: i,
                         name: formData.get(`player${i}.name`),
