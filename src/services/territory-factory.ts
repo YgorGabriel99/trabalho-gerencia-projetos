@@ -10,7 +10,8 @@ export class TerritoryFactory{
         slug: string;
         name: string; id: number; 
         neighbors: number[];
-        continent: number
+        continent: number,
+        card: number
         }) => {
             let territorio = new Territory(
                 {
@@ -19,6 +20,7 @@ export class TerritoryFactory{
                     x: 0, 
                     y: 0,
                     armies: 0,
+                    card: territory.card,
                     continent: territory.continent,
                     spriteSource: territoriosData[territory.slug].spriteSourceSize,
                     neighbors: territory.neighbors,

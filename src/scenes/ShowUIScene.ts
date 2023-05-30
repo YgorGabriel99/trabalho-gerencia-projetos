@@ -1,5 +1,6 @@
 import { WarMatch } from "../game/WarMatch";
 import { Card } from "../model/Card";
+import { playerCOLORS } from "../model/GamePlayer";
 import eventsCenter from "../services/EventsCenter";
 export default class ShowUIScene extends Phaser.Scene {
     public warMatch: WarMatch;
@@ -77,7 +78,13 @@ export default class ShowUIScene extends Phaser.Scene {
         })
 
 
-        this.cards = this.warMatch.board.showHand(300, 350  , currentPlayer, this)
+        // currentPlayer?.hand.push(Math.round(Math.random()*41) + 1)
+        // currentPlayer?.hand.push(Math.round(Math.random()*41) + 1)
+        // currentPlayer?.hand.push(Math.round(Math.random()*41) + 1)
+        // currentPlayer?.hand.push(Math.round(Math.random()*41) + 1)
+        // currentPlayer?.hand.push(Math.round(Math.random()*41) + 1)
+
+        this.cards = this.warMatch.board.showHand(350, 380  , currentPlayer, this)
         
     }
 

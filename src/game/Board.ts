@@ -73,10 +73,12 @@ export class Board {
         player.hand.forEach((cardId, index) =>{
             let territory = this.getTerritoryById(cardId)
             let card = new Card({
-                x: x + (40 * index),
+                x: x + (35 * index),
                 y,
                 scene,
+                card: this.cardFigures[territory.card],
                 territory,
+                // card: this.cardFigures[territory?.card],
                 continent: this.continents[territory?.continent]
             })
             hand.push(card);

@@ -1,14 +1,17 @@
 {"cards": {
     "1": {
         "id": 1,	
-        "name": "Triangle"
+        "name": "Triangle",
+        "symbol": "▲"
     },
     "2": {
         "id": 2,
-        "name": "Circle"
+        "name": "Circle",
+        "symbol": "●"
     },
     "3": {
         "id": 3,
-        "name": "Square"
+        "name": "Square",
+        "symbol":"■"	
     }
 }}

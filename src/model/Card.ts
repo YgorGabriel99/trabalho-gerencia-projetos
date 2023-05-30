@@ -1,25 +1,38 @@
 export class Card extends Phaser.GameObjects.Container {
+    public isSelected: boolean = false;
+    cardRectangle: Phaser.GameObjects.Rectangle;
 
     constructor(data: any) {
-        console.log(data)
         let {x,y, scene, card, territory, continent} = data
         
-        console.log(data)
         
         // let cardText = new Phaser.GameObjects.BitmapText(x , y, scene, "pressstart", territory.name, 12, Phaser.GameObjects.BitmapText.ALIGN_CENTER)
-        let cardRectangle = new Phaser.GameObjects.Rectangle(scene, x, y, 100, 150, 0x000).setAlpha(0.2).setOrigin(0.5)
-        let cardText = new Phaser.GameObjects.Text(scene, x , y, territory.name, {color: "black", align:"center"}).setOrigin(0.5)
-        super(scene, x, y, [cardText, cardRectangle])
-        this.setScale(0.5)
+        let cardRectangle = new Phaser.GameObjects.Rectangle(scene, x, y, 100, 150, 0x000).setOrigin(0.5)            
 
-        cardRectangle.setInteractive()
-        cardRectangle.on("pointerover",()=>{
+        let figureText = new Phaser.GameObjects.Text(scene, x , y, card.symbol, {color: "black", align:"center", fontSize: "32px"}).setOrigin(0.5)
+        .setColor(continent.color).setStroke("#ccc", 1)
+
+        let continentText = new Phaser.GameObjects.Text(scene, x , y + 40, continent.name.replace(" ", "\n") , {color: "black", align:"center"}).setOrigin(0.5)
+        .setColor(continent.color).setStroke("#ccc", 1)
+
+        let territoryText = new Phaser.GameObjects.Text(scene, x , y - 40, territory.name.replace(" ", "\n") , {color: "black", fontSize: "14px", align:"center"}).setOrigin(0.5)
+        .setColor(continent.color).setStroke("#ccc", 1)
+
+        super(scene, x, y, [cardRectangle, continentText, figureText, territoryText,])
+        this.setScale(0.5)
+        this.cardRectangle = cardRectangle
+
+        cardRectangle.setInteractive({ useHandCursor: true  })
+        cardRectangle.on("pointerover",(pointer, object)=>{
+            console.log("x",pointer.x, object)
+            console.log("y",pointer.y, object)
             this.scene.tweens.add({
                 targets: this,
                 props: {
-                    scale: 0.8,
-                    x: x-100,
-                    y: y - 150
+                    scale: 1,
+                    x: x - 120 - 50,
+                    y: y - 250,
+                    depth: 10
                 },
                 duration: 500,
                 ease: 'Power3'
@@ -31,15 +44,29 @@ export class Card extends Phaser.GameObjects.Container {
                 props: {
                     scale: 0.5,
                     x: x,
-                    y: y
+                    y: y,
+                    depth: 1
                 },
                 duration: 500,
                 ease: 'Power3'
             })
         })
+        cardRectangle.on("pointerdown", ()=>{
+            this.select()
+        })
 
         this.scene.add.existing(this)
+        
 
+    }
+
+    select(){
+        if(this.isSelected){
+            this.cardRectangle.setStrokeStyle(5, 0xFFFFFFFF)
+        }else{
+            this.cardRectangle.setStrokeStyle(0, 0xFFFFFFFF)
+        }
+        this.isSelected = !this.isSelected
     }
 
 
