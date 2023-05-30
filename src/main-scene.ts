@@ -7,7 +7,7 @@ import { Territory } from "./model/Territory";
 import { Board } from "./game/Board";
 import eventsCenter from "./services/EventsCenter";
 import PlayerType from "./model/Player";
-import ContadorExercitos from "./model/ContadorExercitos";
+import ContadorExercitos from "./view/ContadorExercitos";
 import InitGameScene from "./scenes/InitGameScene";
 import Util from "./services/Util";
 
@@ -200,6 +200,9 @@ export class MainGameScene extends Phaser.Scene {
             {id: 1, name: 'Tiago', ia: 'true', color: 'black'},
             {id: 2, name: 'Diogo', ia: 'false', color: 'blue'},
             {id: 3, name: 'Julia', ia: 'true', color: 'red'},
+            {id: 4,name: "Gaaby",ia: false,color: 'green'},
+            {id: 5,name: "Baarb",ia: false,color: 'yellow'},
+            {id: 6,name: "Lucca",ia: false,color: 'pink'}
 
         ]
         // this.scene.run("InitGameScene")
