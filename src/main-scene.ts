@@ -44,34 +44,13 @@ export class MainGameScene extends Phaser.Scene {
         // //Carregando dados do mapa
         this.load.json('frame', 'assets/images/mapa_war.json');
         this.load.json('territories', 'assets/data/territories.json');
-
-        this.load.image('barra_azul', 'assets/images/icon_retangulo_azul.png');
-        this.load.image('ellipse', 'assets/images/ellipse.png');
-        this.load.image('carta', 'assets/images/icon_cartas.png');
-        this.load.image('computer', 'assets/images/icon_computer.png');
-        this.load.image('musica', 'assets/images/icon_musica.png');
-        this.load.image('objetivo', 'assets/images/icon_objetivo.png');
-        this.load.image('retangulo_pequeno', 'assets/images/icon_retangulo_pequeno.png');
-        this.load.image('sair', 'assets/images/icon_sair.png');
-        this.load.image('segurança', 'assets/images/icon_segurança.png');
-        this.load.image('volume', 'assets/images/icon_volume.png');
-        this.load.image('retangulo_arredondado', 'assets/images/icon_retangulo_arredondado.png');
-        this.load.image('retangulo_branco', 'assets/images/icon_retangulo_branco.png');
-        this.load.image('pessoa', 'assets/images/pessoa.png');
         
     }
     
     create(): void {
 
         this.warMatch = new WarMatch(new Board(), new Turn(), this);
-        this.items = new ContadorExercitos({
-            scene:this,
-            name: "Usuário1",
-            x: 0,
-            y: 0,
-            fundo: 'retangulo_arredondado',
-            image: 'pessoa',
-        });
+        
         // this.warMatch.shufflePlayerInBoard()
         
         // this.warMatch.getPlayerTotalTerritories(this.warMatch.players[0])
@@ -218,17 +197,19 @@ export class MainGameScene extends Phaser.Scene {
         })
 
         let players = [
-            {id: 1, name: 'Tiago', ia: 'false', color: 'black'},
+            {id: 1, name: 'Tiago', ia: 'true', color: 'black'},
             {id: 2, name: 'Diogo', ia: 'false', color: 'blue'},
-            {id: 3, name: 'Julia', ia: 'false', color: 'red'},
+            {id: 3, name: 'Julia', ia: 'true', color: 'red'},
 
         ]
         // this.scene.run("InitGameScene")
         // eventsCenter.emit('init', players);
 
         if(this.warMatch.init(players)){
-            this.scene.run("ShowUIScene",{warMatch: this.warMatch})
+            // this.scene.run("ShowUIScene",{warMatch: this.warMatch})
+            this.scene.run("DisplayScene",{warMatch: this.warMatch})
         }
+
         
     }
 

@@ -50,11 +50,11 @@ export class WarMatch{
     }
 
     setPlayerTotalTerritories(player:GamePlayer){
-        console.log(player)
+        // console.log(player)
         const territoriesOwned =  this.board.territories.filter((territory) =>{
             return territory.owner?.id === player.id
         })
-        console.log(territoriesOwned.length)
+        // console.log(territoriesOwned.length)
         player.totalTerritories = territoriesOwned.length
     }   
 
@@ -105,15 +105,15 @@ export class WarMatch{
     }
 
     getTotalArmiesToPlace() {
-        console.log(this)
+        //console.log(this)
         // let player = game.getCurrentPlayer()
         let player = this.getCurrentPlayer()
         this.setPlayerTotalTerritories(player)
         // let general = player?.totalTerritories
 
-        console.log(player)
+        //console.log(player)
         
-        console.log(player.totalTerritories)
+        //console.log(player.totalTerritories)
         player?.setPlaceble("all", Math.max(Math.floor(player.totalTerritories/2), 3))
         
 

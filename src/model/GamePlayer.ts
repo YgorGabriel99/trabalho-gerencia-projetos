@@ -27,16 +27,18 @@ export class GamePlayer extends Player{
     public totalTerritories: number;
     public playerText: Phaser.GameObjects.Text;
     public armies
+    public ia:boolean
     public placed: Placed = {"all":0}
     public placeble: Placeble = {"all":0}
     public gainedTerritory = false
     warMatch: WarMatch;
     
     // public ia: boolean;
-    constructor(data:PlayerType, color: number, warMatch: WarMatch) {
+    constructor(data:PlayerType, color: number, warMatch: WarMatch, ia: boolean) {
         super(data);
         this.color = color;
         this.warMatch = warMatch;
+        this.ia = data.ia;
     }
 
     destroyPlayerText(){
