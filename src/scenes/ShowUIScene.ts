@@ -10,6 +10,7 @@ export default class ShowUIScene extends Phaser.Scene {
     finishPhaseButton: Phaser.GameObjects.Text;
     displayPhase: Phaser.GameObjects.Text;
     displayMessage: Phaser.GameObjects.Text;
+    displayObjective: Phaser.GameObjects.Text;
     cards: Card[];
     startButton: any;
     changeCardsButton: Phaser.GameObjects.Arc;
@@ -41,6 +42,10 @@ export default class ShowUIScene extends Phaser.Scene {
 
         if(this.displayPhase){
             this.displayPhase.destroy()
+        }
+
+        if(this.displayObjective){
+            this.displayObjective.destroy()
         }
 
     }
@@ -75,6 +80,9 @@ export default class ShowUIScene extends Phaser.Scene {
         .setColor("#000")
         this.updateArmies()
 
+        this.displayObjective = this.add.text(this.INITIALX + 970, this.INITIALY +100, 
+            this.warMatch.board.getObjectiveText(currentPlayer),
+            {wordWrap: { width: 230, useAdvancedWrap: true }, backgroundColor: "black"}).setPadding(10)
 
         this.changeCardsButton = this.add.circle(450, 570 , 30, 0x000, 10).setInteractive({ useHandCursor: true })
         this.changeCardsText = this.add.text(450, 570, "Trocar", {fontSize:"12px", color:"#fff"}).setOrigin(0.5)

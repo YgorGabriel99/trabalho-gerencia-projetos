@@ -1,0 +1,17 @@
+{"objectives":{
+    "1":{"id":1, "description": "Destruir exércitos azuis","slug":"destroy-blue"},
+    "2":{"id":2, "description": "Destruir exércitos amarelos","slug":"destroy-yellow"},
+    "3":{"id":3, "description": "Destruir exércitos rosas","slug":"destroy-pink"},
+    "4":{"id":4, "description": "Destruir exércitos verdes","slug":"destroy-green"},
+    "5":{"id":5, "description": "Destruir exércitos pretos","slug":"destroy-black"},
+    "6":{"id":6, "description": "Destruir exércitos vermelhos","slug":"destroy-red"},
+    "7":{"id":7, "description": "Conquistar América do Norte e África","slug":"conquer-north-america-africa"},
+    "8":{"id":8, "description": "Conquistar Ásia e África","slug":"conquer-asia-africa"},
+    "9":{"id":9, "description": "Conquistar América do Norte e Oceania","slug":"conquer-north-america-oceania"},
+    "10":{"id":10, "description": "Conquistar Europa, América do Sul e +1 continente","slug":"conquer-europe-south-america-plus-one"},
+    "11":{"id":11, "description": "Conquistar Ásia e América do Sul","slug":"conquer-asia-south-america"},
+    "12":{"id":12, "description": "Conquistar Europa, Oceania e +1 continente","slug":"conquer-europe-oceania-plus-one"},
+    "13":{"id":13, "description": "18 territórios com 2 em cada","slug":"conquer-eighteen-with-two"},
+    "14":{"id":14, "description": "Conquistar 24 territórios","slug":"conquer-twenty-four"}
+    }
+}

@@ -1,4 +1,5 @@
 import { WarMatch } from "../game/WarMatch";
+import Objective from "./Objective";
 import PlayerType, { Player } from "./Player";
 import { Territory } from "./Territory";
 
@@ -52,8 +53,9 @@ export class GamePlayer extends Player{
     }
     public gainedTerritory = false;
     public hand: number[] = []
-    warMatch: WarMatch;
-    
+    public warMatch: WarMatch;
+    public objective: Objective;
+
     // public ia: boolean;
     constructor(data:PlayerType, color: number, warMatch: WarMatch) {
         super(data);

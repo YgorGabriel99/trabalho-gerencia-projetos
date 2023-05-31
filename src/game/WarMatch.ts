@@ -89,24 +89,34 @@ export class WarMatch{
         let playersIds = players.map(player => {
             return player.id
         })
+
         this.turn.init(playersIds);
+
         let territoryIds = this.scene.cache.json.get('territories').territories
+
         .map((territory:Territory) => {
             return territory.id;
         })
         this.board.setTerritories(TerritoryFactory.loadCountries(this.scene))
-        this.board.init(territoryIds, this.scene.continentsData, this.scene.cardsData)
+        this.board.init(territoryIds, this.scene.continentsData, this.scene.cardsData, this.scene.objectiveCardsData)
 
         this.shufflePlayerInBoard()
+        this.drawPlayersObjectives()
         this.board.reshuffleDeck()
-        // this.getCurrentPlayer()?.hand.push(Math.round(Math.random()*41)+1)
-        // this.getCurrentPlayer()?.hand.push(Math.round(Math.random()*41)+1)
-        // this.getCurrentPlayer()?.hand.push(Math.round(Math.random()*41)+1)
-        // this.getCurrentPlayer()?.hand.push(Math.round(Math.random()*41)+1)
-        // this.getCurrentPlayer()?.hand.push(Math.round(Math.random()*41)+1)
+        this.getCurrentPlayer()?.hand.push(Math.round(Math.random()*41)+1)
+        this.getCurrentPlayer()?.hand.push(Math.round(Math.random()*41)+1)
+        this.getCurrentPlayer()?.hand.push(Math.round(Math.random()*41)+1)
+        this.getCurrentPlayer()?.hand.push(Math.round(Math.random()*41)+1)
+        this.getCurrentPlayer()?.hand.push(Math.round(Math.random()*41)+1)
 
         eventsCenter.emit(this.turn.phasesNames[Phases.MOBILIZAR],this.turn.phasesNames[Phases.MOBILIZAR])
         return true
+    }
+
+    drawPlayersObjectives() {
+        this.players.forEach(player =>{
+            this.board.drawObjective(player, this);
+        })
     }
 
     getTotalArmiesToPlace() {
@@ -128,6 +138,7 @@ export class WarMatch{
         //Mobilizar
         switch (this.turn.currentPhase) {
             case Phases.MOBILIZAR:
+                return true
                  //Mao maior que 5
                 let handSize = this.getCurrentPlayer().hand.length === 5
                 //Existe exercito para alocar

@@ -27,30 +27,16 @@ export class MainGameScene extends Phaser.Scene {
     public inputKeys: object;
     continentsData: any;
     cardsData: any;
+    objectiveCardsData: any;
     constructor() {
         super('MainGameScene');
-        
-    }
-
-    preload():void{
-        //Carregando os territórios
-        let territorios = this.load.aseprite('territorios', 
-        '../assets/images/mapa_war.png',
-        '../assets/images/mapa_war.json')    
-
-        //Carregando a fonte
-        this.load.bitmapFont('pressstart', 'assets/fonts/pressstart.png','assets/fonts/pressstart.fnt') 
-        
-        // //Carregando dados do mapa
-        this.load.json('frame', 'assets/images/mapa_war.json');
-        this.load.json('territories', 'assets/data/territories.json');
-        // this.load.json('continents', 'assets/data/continents.json');
         
     }
     
     create(): void {
         this.continentsData = this.cache.json.get('continents').continents;
         this.cardsData = this.cache.json.get('cards').cards;
+        this.objectiveCardsData = this.cache.json.get('objectives').objectives
   
         this.warMatch = new WarMatch(new Board(), new Turn(), this);
        

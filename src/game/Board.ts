@@ -1,9 +1,11 @@
 import { Card } from "../model/Card";
 import { GamePlayer } from "../model/GamePlayer";
+import Objective from "../model/Objective";
 import { Player } from "../model/Player";
 import { Territory } from "../model/Territory";
 import Graph from "../services/Graph";
 import Util from "../services/Util";
+import { WarMatch } from "./WarMatch";
 
 const exchangeTable = {
     "1": 4,
@@ -16,12 +18,10 @@ const exchangeTable = {
 }
 
 export class Board {
-   
-
-
     public territories: Array<Territory> = [];
     public continents = {};
-    public cardFigures = {}
+    public cardFigures = {};
+    public objectives = {};
     public territoriesGraph: Graph;
     public territoryCards: number[] = [];
     public objectiveCards: number[] = [];
@@ -29,15 +29,22 @@ export class Board {
     public discard: number[] = [];
     public exchangeNumber: number = 1;
     public exchangeArmies: number = exchangeTable[this.exchangeNumber];
+    
 
-    init(territoryIds: number[], continents, cardFigures) {
+    init(territoryIds: number[], continents, cardFigures, objectives) {
+        
         this.setInitialTerritoryCards(territoryIds)
+        this.objectives = objectives
+        this.setInitialObjectiveCards()
         this.shuffleTerritoryCards();
+        this.shuffleObjectiveCards();
         this.continents = continents
         this.cardFigures = cardFigures
-        this.territoriesGraph = new Graph();
-        this.setupGraph();
+        // this.territoriesGraph = new Graph();
+        // this.setupGraph();
     }
+    
+    
 
 
     setupGraph() {
@@ -63,6 +70,12 @@ export class Board {
         )
     }
 
+    shuffleObjectiveCards() {
+        this.objectiveCards = Util.shuffle(
+            this.objectiveCards
+        )
+    }
+
     shuffleDeck(){
         this.deck = Util.shuffle(
             this.deck
@@ -78,6 +91,15 @@ export class Board {
     drawCard(player: GamePlayer) {
         player.hand.push(this.deck.pop())
         player.gainedTerritory = false
+    }
+
+    drawObjective(player: GamePlayer, warMatch: WarMatch) {
+        let objective = new Objective(warMatch, player, this.objectiveCards.pop())
+        player.objective = objective
+    }
+
+    getObjectiveText(player: GamePlayer){
+        return this.objectives[player.objective.id].description
     }
 
     showHand(x:number, y:number, player: GamePlayer, scene:Phaser.Scene) {
@@ -183,6 +205,12 @@ export class Board {
 
     setInitialTerritoryCards(territories: number[]){
         this.territoryCards = territories
+    }
+
+    setInitialObjectiveCards() {
+        this.objectiveCards = Object.keys(this.objectives).map(key =>{
+            return this.objectives[key].id
+        })
     }
 
     hasTerritoryWIthoutOwner(){
