@@ -33,8 +33,14 @@ export class WarMatch{
     }
 
     getPlayerById(id: number): GamePlayer {
-        const player: GamePlayer = this.players.find(player => player.id === id);
-        return player
+        return this.players.find(player => player.id === id)
+    }
+
+    getPlayerByColor(color: number | string){
+        if(typeof color === 'string'){
+            color = playerCOLORS[color]
+        }
+        return this.players.find(player => player.color === color);        
     }
 
     shufflePlayerInBoard(): void {
@@ -117,6 +123,7 @@ export class WarMatch{
         this.players.forEach(player =>{
             this.board.drawObjective(player, this);
         })
+        console.log(this.players)
     }
 
     getTotalArmiesToPlace() {

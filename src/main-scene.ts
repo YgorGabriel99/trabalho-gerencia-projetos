@@ -9,6 +9,7 @@ import eventsCenter from "./services/EventsCenter";
 import PlayerType from "./model/Player";
 import InitGameScene from "./scenes/InitGameScene";
 import Util from "./services/Util";
+import Objective from "./model/Objective";
 
 
 
@@ -81,12 +82,16 @@ export class MainGameScene extends Phaser.Scene {
 
         eventsCenter.on("territory-clicked", (territory:Territory) =>{
             if(this.warMatch.turn.currentPhase === Phases.MOBILIZAR){
+
                 territory.mobilize(this.warMatch.board.continents)
+
             }else if(this.warMatch.turn.currentPhase === Phases.ATACAR){
+
                 this.warMatch.board.checkAttackCondition(
                     territory, this.warMatch.getCurrentPlayer()
                 )
             }else if(this.warMatch.turn.currentPhase === Phases.FORTIFICAR){
+
                 this.warMatch.board.checkFortifyCondition(
                     territory, this.warMatch.getCurrentPlayer()
                 )
@@ -103,15 +108,19 @@ export class MainGameScene extends Phaser.Scene {
             }
         })
 
+        eventsCenter.on("check-victory", (data)=>{
+            Objective.checkVictoryCondition(this.warMatch, data)
+        })
+
         let players = [
             {id: 1, name: 'Tiago', ia: 'false', color: 'black'},
             {id: 2, name: 'Paulo', ia: 'false', color: 'blue'},
             {id: 3, name: 'Rafa', ia: 'false', color: 'red'},
-            {id: 4,name: "Ygor",ia: false,color: 'green'},
-            {id: 5,name: "Thali",ia: false,color: 'yellow'},
-            {id: 6,name: "Edu",ia: false,color: 'pink'}
-
+            // {id: 4,name: "Ygor",ia: false,color: 'green'},
+            // {id: 5,name: "Thali",ia: false,color: 'yellow'},
+            // {id: 6,name: "Edu",ia: false,color: 'pink'}
         ]
+
         // this.scene.run("InitGameScene")
         // eventsCenter.emit('init', players);
 

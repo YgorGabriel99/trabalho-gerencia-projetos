@@ -1,10 +1,11 @@
 import { Card } from "../model/Card";
-import { GamePlayer } from "../model/GamePlayer";
+import { GamePlayer, playerCOLORS } from "../model/GamePlayer";
 import Objective from "../model/Objective";
-import { Player } from "../model/Player";
 import { Territory } from "../model/Territory";
+import eventsCenter from "../services/EventsCenter";
 import Graph from "../services/Graph";
 import Util from "../services/Util";
+import { Phases } from "./Turn";
 import { WarMatch } from "./WarMatch";
 
 const exchangeTable = {
@@ -22,7 +23,6 @@ export class Board {
     public continents = {};
     public cardFigures = {};
     public objectives = {};
-    public territoriesGraph: Graph;
     public territoryCards: number[] = [];
     public objectiveCards: number[] = [];
     public deck: number[] = [];
@@ -40,29 +40,11 @@ export class Board {
         this.shuffleObjectiveCards();
         this.continents = continents
         this.cardFigures = cardFigures
-        // this.territoriesGraph = new Graph();
-        // this.setupGraph();
     }
     
-    
-
-
-    setupGraph() {
-        // let result = []
-        this.territories.forEach(territory => {
-            this.territoriesGraph.addVertex(territory.id)
-            territory.neighbors.forEach(neighbor => {
-                this.territoriesGraph.addEdge(
-                    territory.id, neighbor
-                )
-            })
-        })
-    }
-
     getTerritoryById(id: number){
         return this.territories.find(territory => territory.id === id);
     }
-
 
     shuffleTerritoryCards() {
         this.territoryCards = Util.shuffle(
@@ -94,8 +76,27 @@ export class Board {
     }
 
     drawObjective(player: GamePlayer, warMatch: WarMatch) {
-        let objective = new Objective(warMatch, player, this.objectiveCards.pop())
+        let objectiveCardId = this.objectiveCards.pop()
+        let objectiveColor = playerCOLORS[this.objectives[objectiveCardId].condition.color]
+        let samePlayerObjective = player.color === objectiveColor
+        let withoutColorInPlay = false
+        if(objectiveColor){
+            withoutColorInPlay = warMatch.players.filter(player => player.color === objectiveColor).length === 0
+        }
+        if(samePlayerObjective || withoutColorInPlay ){
+            objectiveCardId = 14
+        }
+        
+        let objective = new Objective(warMatch, player, this.objectives[objectiveCardId])
+        if(objective.condition.color){
+            warMatch.getPlayerByColor(objective.condition.color).aimer = player
+        }
         player.objective = objective
+        console.log(objective)
+    }
+
+    resetObjective(warMatch:WarMatch, player: GamePlayer){
+        player.objective = new Objective(warMatch, player, this.objectives[14])
     }
 
     getObjectiveText(player: GamePlayer){
@@ -208,9 +209,13 @@ export class Board {
     }
 
     setInitialObjectiveCards() {
+        // Setup com um pouco menos de cartas
+        let filter = [14, 1,2,3,4,5,6]
         this.objectiveCards = Object.keys(this.objectives).map(key =>{
+            // console.log(key)
             return this.objectives[key].id
         })
+        .filter(key => filter.indexOf(key) > -1)
     }
 
     hasTerritoryWIthoutOwner(){
@@ -246,11 +251,12 @@ export class Board {
 
         if(defender.armies === 0){
             let transfer = attackQuantity - combatResult[0]
-            // defender.owner = attacker.owner
             attacker.armies -= transfer
+            let conquered = defender.owner
             defender.conquer(attacker.owner, transfer)
+            conquered?.updateTotalTerritories()
             attacker.owner.gainedTerritory = true
-            // attacker.owner.gainedTerritory = true
+            eventsCenter.emit("check-victory", {attacker: attacker.owner, defender: conquered, acao: Phases.ATACAR}, )
         }
         this.clearBoard()
     }
@@ -266,7 +272,7 @@ export class Board {
                 attackLosses++
             }
         }
-        console.log([attackLosses, defenseLosses])
+        // console.log([attackLosses, defenseLosses])
         return [attackLosses, defenseLosses]
     }
 
@@ -279,6 +285,7 @@ export class Board {
         if(territory.isHighlighted){
             let origin = this.getSelected()
             this.fortify(origin, territory)
+            eventsCenter.emit("check-victory", {acao: Phases.FORTIFICAR})
         }else if(territory.owner?.id === player?.id){
             this.clearBoard()
             territory.select()
@@ -323,7 +330,5 @@ export class Board {
             return territory.owner?.id === player.id
         })
         return territoriesOwned
-    }
-
-    
+    }    
 }

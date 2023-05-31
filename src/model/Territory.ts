@@ -1,3 +1,4 @@
+import { Phases } from "../game/Turn";
 import eventsCenter from "../services/EventsCenter";
 import { GamePlayer } from "./GamePlayer";
 
@@ -65,8 +66,8 @@ export class Territory extends Phaser.GameObjects.Container {
                 this.placeArmies(1);
                 this.owner.placeArmie("all",1)
             }
+            eventsCenter.emit("check-victory", {acao: Phases.MOBILIZAR})
         }
-        eventsCenter.emit("armies-placed")
     }
 
     changeSelected():void{

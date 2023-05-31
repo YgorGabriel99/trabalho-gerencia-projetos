@@ -33,7 +33,8 @@ export class GamePlayer extends Player{
     public totalArmies: number;
     public totalTerritories: number;
     public playerText: Phaser.GameObjects.Text;
-    public armies
+    public armies;
+    public destroyed = false;
     public placed: Placeble = {
         "all":0, "south-america":0,    
         "asia": 0,
@@ -55,6 +56,7 @@ export class GamePlayer extends Player{
     public hand: number[] = []
     public warMatch: WarMatch;
     public objective: Objective;
+    public aimer: GamePlayer;
 
     // public ia: boolean;
     constructor(data:PlayerType, color: number, warMatch: WarMatch) {
@@ -100,6 +102,10 @@ export class GamePlayer extends Player{
         }
     }
 
+    updateTotalTerritories(){
+        this.totalTerritories = this.warMatch.getPlayerTerritories(this).length;
+    }
+
     unplaceArmie(type:string, quantity:number){
         // if(this.placeble)
         this.placeble[type] += quantity;
@@ -123,6 +129,10 @@ export class GamePlayer extends Player{
 
     isOwner(territory: Territory){
         return this.id === territory.owner?.id
+    }
+
+    hasBeenDestroyed(){
+        return this.totalTerritories === 0
     }
 
     // resetPlaced(){
