@@ -12,6 +12,7 @@ enum Status {
     FINISHED = 2
 }
 export class WarMatch{
+    
 
     public scene: Phaser.Scene;
     public players: Array<GamePlayer> = [];
@@ -30,6 +31,21 @@ export class WarMatch{
 
     addPlayer(player: GamePlayer): void {
         this.players.push(player);
+    }
+
+    removePlayerFromMatch(defender: GamePlayer) {
+        let indexPlayers = this.players.findIndex(player =>{
+            return player.id === defender.id
+        })
+        let indexOrder = this.turn.playersOrders.findIndex(playerId => {
+            return playerId === defender.id
+        })
+        this.players.splice(indexPlayers, 1);
+        this.turn.playersOrders.splice(indexOrder, 1);
+        this.turn.setTotalPlayers()
+        defender.destroyPlayerText()
+        console.log(this.players)
+        console.log(this.turn.playersOrders)
     }
 
     getPlayerById(id: number): GamePlayer {
@@ -109,11 +125,11 @@ export class WarMatch{
         this.shufflePlayerInBoard()
         this.drawPlayersObjectives()
         this.board.reshuffleDeck()
-        this.getCurrentPlayer()?.hand.push(Math.round(Math.random()*41)+1)
-        this.getCurrentPlayer()?.hand.push(Math.round(Math.random()*41)+1)
-        this.getCurrentPlayer()?.hand.push(Math.round(Math.random()*41)+1)
-        this.getCurrentPlayer()?.hand.push(Math.round(Math.random()*41)+1)
-        this.getCurrentPlayer()?.hand.push(Math.round(Math.random()*41)+1)
+        // this.getCurrentPlayer()?.hand.push(Math.round(Math.random()*41)+1)
+        // this.getCurrentPlayer()?.hand.push(Math.round(Math.random()*41)+1)
+        // this.getCurrentPlayer()?.hand.push(Math.round(Math.random()*41)+1)
+        // this.getCurrentPlayer()?.hand.push(Math.round(Math.random()*41)+1)
+        // this.getCurrentPlayer()?.hand.push(Math.round(Math.random()*41)+1)
 
         eventsCenter.emit(this.turn.phasesNames[Phases.MOBILIZAR],this.turn.phasesNames[Phases.MOBILIZAR])
         return true
@@ -123,7 +139,6 @@ export class WarMatch{
         this.players.forEach(player =>{
             this.board.drawObjective(player, this);
         })
-        console.log(this.players)
     }
 
     getTotalArmiesToPlace() {

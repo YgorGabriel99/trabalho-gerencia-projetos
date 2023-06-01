@@ -48,6 +48,10 @@ export default class ShowUIScene extends Phaser.Scene {
             this.displayObjective.destroy()
         }
 
+        if(this.finishPhaseButton){
+            this.finishPhaseButton.destroy()
+        }
+
     }
 
     refresh(){
@@ -59,9 +63,10 @@ export default class ShowUIScene extends Phaser.Scene {
         let counter = 0;
         this.warMatch.turn.playersOrders.forEach(playerId => {
             let player = this.warMatch.getPlayerById(playerId);
-            if(player.playerText){
+            if(player && player.playerText){
                 player.destroyPlayerText()
             }
+            
             let currentPlayerId = this.warMatch.turn.getCurrentPlayerId();
             this.warMatch.setPlayerTotalArmies(player)
             this.warMatch.setPlayerTotalTerritories(player)
@@ -122,12 +127,19 @@ export default class ShowUIScene extends Phaser.Scene {
             this.finishPhaseButton.setAlpha(1)
         })
 
+        eventsCenter.on("player-destroyed", (player) =>{
+            this.refresh()
+        })
+        eventsCenter.on("game-finished", (player)=>{
+            this.refresh()
+        })
+
+        
         this.cards = this.warMatch.board.showHand(350, 380  , currentPlayer, this)
 
     }
 
     updateArmies(){
-        
         let player = this.warMatch.getCurrentPlayer()
 
         // console.log(this.warMatch.getCurrentPlayer())

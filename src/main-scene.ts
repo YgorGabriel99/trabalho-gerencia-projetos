@@ -42,6 +42,8 @@ export class MainGameScene extends Phaser.Scene {
         this.warMatch = new WarMatch(new Board(), new Turn(), this);
        
         this.add.bitmapText(10,10,'pressstart','WAR')
+
+
       
         //Eventos
         eventsCenter.on("init", (players: PlayerType[]) => {
@@ -112,13 +114,21 @@ export class MainGameScene extends Phaser.Scene {
             Objective.checkVictoryCondition(this.warMatch, data)
         })
 
+        eventsCenter.on("game-finished", (player)=>{
+            // if(this.warMatch.getCurrentPlayer()){
+            this.add.bitmapText(this.game.config.width/2,this.game.config.height/2,"pressstart", `Fim de Jogo \n o player ${player.name} venceu`).setDepth(1000).setOrigin(0.5)
+            // }
+        })
+        
+
+    
         let players = [
             {id: 1, name: 'Tiago', ia: 'false', color: 'black'},
             {id: 2, name: 'Paulo', ia: 'false', color: 'blue'},
             {id: 3, name: 'Rafa', ia: 'false', color: 'red'},
-            // {id: 4,name: "Ygor",ia: false,color: 'green'},
-            // {id: 5,name: "Thali",ia: false,color: 'yellow'},
-            // {id: 6,name: "Edu",ia: false,color: 'pink'}
+            {id: 4,name: "Ygor",ia: false,color: 'green'},
+            {id: 5,name: "Thali",ia: false,color: 'yellow'},
+            {id: 6,name: "Edu",ia: false,color: 'pink'}
         ]
 
         // this.scene.run("InitGameScene")

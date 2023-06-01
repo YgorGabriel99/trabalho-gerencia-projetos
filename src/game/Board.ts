@@ -3,7 +3,6 @@ import { GamePlayer, playerCOLORS } from "../model/GamePlayer";
 import Objective from "../model/Objective";
 import { Territory } from "../model/Territory";
 import eventsCenter from "../services/EventsCenter";
-import Graph from "../services/Graph";
 import Util from "../services/Util";
 import { Phases } from "./Turn";
 import { WarMatch } from "./WarMatch";
@@ -84,7 +83,7 @@ export class Board {
             withoutColorInPlay = warMatch.players.filter(player => player.color === objectiveColor).length === 0
         }
         if(samePlayerObjective || withoutColorInPlay ){
-            objectiveCardId = 14
+            objectiveCardId =13
         }
         
         let objective = new Objective(warMatch, player, this.objectives[objectiveCardId])
@@ -92,11 +91,11 @@ export class Board {
             warMatch.getPlayerByColor(objective.condition.color).aimer = player
         }
         player.objective = objective
-        console.log(objective)
     }
 
     resetObjective(warMatch:WarMatch, player: GamePlayer){
-        player.objective = new Objective(warMatch, player, this.objectives[14])
+        console.log(warMatch, player, this.objectives[13])
+        player.objective = new Objective(warMatch, player, this.objectives[13])
     }
 
     getObjectiveText(player: GamePlayer){
@@ -210,12 +209,14 @@ export class Board {
 
     setInitialObjectiveCards() {
         // Setup com um pouco menos de cartas
-        let filter = [14, 1,2,3,4,5,6]
+        // let filter = [13, 1,2,3,4,5,6]
+        // let filter = [7,8,9,10,11,12]
+
         this.objectiveCards = Object.keys(this.objectives).map(key =>{
             // console.log(key)
             return this.objectives[key].id
         })
-        .filter(key => filter.indexOf(key) > -1)
+        // .filter(key => filter.indexOf(key) > -1)
     }
 
     hasTerritoryWIthoutOwner(){
@@ -314,7 +315,7 @@ export class Board {
         })
     }
 
-    hasTotality(player:GamePlayer, continent) {
+    hasTotality(player:GamePlayer, continent: string) {
         let totalTerritoriesInContinent = this.territories.filter(territory =>{
             return territory.continent === parseInt(continent)
         }).length
