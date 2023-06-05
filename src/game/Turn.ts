@@ -27,7 +27,8 @@ export class Turn{
     init(players:number[]) {
         this.shufflePlayerOrder(players);
         // this.currentPhase = Phases.MOBILIZAR;
-        this.nextPhase();
+        // this.nextPhase();
+        this.currentPhase++;
         this.setTotalPlayers();
     }
 

@@ -191,4 +191,6 @@ export class Territory extends Phaser.GameObjects.Container {
         };
         console.log(result)
     }
+
+    
 }

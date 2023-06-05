@@ -1,5 +1,7 @@
+import { Game } from "phaser";
 import { Card } from "../model/Card";
 import { GamePlayer, playerCOLORS } from "../model/GamePlayer";
+import IaPlayer from "../model/IAPlayer";
 import Objective from "../model/Objective";
 import { Territory } from "../model/Territory";
 import eventsCenter from "../services/EventsCenter";
@@ -18,6 +20,7 @@ const exchangeTable = {
 }
 
 export class Board {
+    
     public territories: Array<Territory> = [];
     public continents = {};
     public cardFigures = {};
@@ -94,7 +97,7 @@ export class Board {
     }
 
     resetObjective(warMatch:WarMatch, player: GamePlayer){
-        console.log(warMatch, player, this.objectives[13])
+        // console.log(warMatch, player, this.objectives[13])
         player.objective = new Objective(warMatch, player, this.objectives[13])
     }
 
@@ -123,7 +126,7 @@ export class Board {
     exchangeCards(currentPlayer: GamePlayer | undefined, cards: Territory[]) {
         //Checar se tem cards selecionados e se são no máximo 3
         if(!cards || cards.length != 3){
-            console.log("Devem ser selecionadas três cartas")
+            alert("Devem ser selecionadas três cartas")
             return false
         }else if(this.checkExchangeCondition(cards)){
             currentPlayer?.addPlaceble("all", this.exchangeArmies)
@@ -200,7 +203,7 @@ export class Board {
                 return territory.isHighlighted
             }
         )
-        return highlightedTerritories[0]
+        return highlightedTerritories
     }
 
     setInitialTerritoryCards(territories: number[]){
@@ -236,7 +239,7 @@ export class Board {
             let attacker = this.getSelected()
              this.attack(attacker, territory) 
         }else if(this.hasSelectedTerritory()){
-            console.log("Ataque inválido")
+            alert("Ataque inválido")
         }
     }
 
@@ -288,11 +291,14 @@ export class Board {
             this.fortify(origin, territory)
             eventsCenter.emit("check-victory", {acao: Phases.FORTIFICAR})
         }else if(territory.owner?.id === player?.id){
+            if(territory.armies === 1){
+                return
+            }
             this.clearBoard()
             territory.select()
             territory.highlightOwnedNeighbors(this.territories)
         }else if(this.hasSelectedTerritory()){
-            console.log("Movimento inválido")
+            alert("Movimento inválido")
         }
     }
 
@@ -302,7 +308,7 @@ export class Board {
             destiny.placeArmies(1);
             this.clearBoard();
         }else{
-            console.log("Movimento inválido")
+            alert("Movimento inválido")
         }
     }
 
@@ -331,5 +337,42 @@ export class Board {
             return territory.owner?.id === player.id
         })
         return territoriesOwned
-    }    
+    }
+
+    getContinentByName(name:string){
+        let continent = Object.keys(this.continents).find(continentId =>{
+            return this.continents[continentId].name === name
+        })
+        return continent
+    }
+
+    getTerritoriesByContinent(name:string, player: GamePlayer){
+        if(name === "all"){
+            return this.getPlayerTerritories(player)
+        }else{
+            let continent = this.getContinentByName(name)
+            return this.getPlayerTerritories(player).filter(territory => territory.continent === continent)
+        }
+    }
+
+    getBordersWithOponent(player:GamePlayer){
+        const result:number[] = [];
+        const visited:number[] = [];
+        this.getPlayerTerritories(player).forEach(territory => {
+            territory.neighbors.forEach(neighborId => {
+                let neighbor = this.getTerritoryById(neighborId)
+                console.log(neighbor)
+                if(neighbor.owner !== player && visited.indexOf(neighborId) < 0){
+                    visited.push(neighborId)
+                    result.push(neighborId)
+                }
+            })
+        })
+        // console.log(result)        
+    }
+    
+    getPlayerTerritoriesGratherThanOne(player:GamePlayer) {
+        return this.getPlayerTerritories(player).filter(territory => territory.armies > 1)
+    }
+
 }

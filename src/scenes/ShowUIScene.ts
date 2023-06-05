@@ -74,6 +74,8 @@ export default class ShowUIScene extends Phaser.Scene {
             counter++;
         })
 
+        counter = 6;
+
         this.finishPhaseButton = this.add.text(this.INITIALX, this.INITIALY + (counter * 20), "Finalizar")
         .setOrigin(0).setInteractive({ useHandCursor: true  }).setBackgroundColor("#fcefse")
 
