@@ -68,7 +68,7 @@ export class MainGameScene extends Phaser.Scene {
             this.scene.launch("ShowUIScene",{warMatch: this.warMatch})
         })
 
-        eventsCenter.on(this.warMatch.turn.phasesNames[Phases.MOBILIZAR],(msg: any)=>{
+        eventsCenter.on(this.warMatch.turn.phasesNames[Phases.MOBILIZAR],()=>{
             //Calcular total de exercitos
             if(this.warMatch.getCurrentPlayer()){
                 this.warMatch.getTotalArmiesToPlace()
@@ -78,23 +78,35 @@ export class MainGameScene extends Phaser.Scene {
                 // alert("IA Jogando")
                 this.warMatch.getCurrentPlayer().cardExchange()
                 this.warMatch.getCurrentPlayer().mobilize()
+                if(this.warMatch.hasConditionToNextPhase()){
+                    // eventsCenter.emit("next-phase",this.warMatch.getCurrentPlayer())
+                    // this.warMatch.turn.nextPhase()
+                }
             }
                    
         })
 
-        eventsCenter.on(this.warMatch.turn.phasesNames[Phases.ATACAR],(msg: any)=>{
+        eventsCenter.on(this.warMatch.turn.phasesNames[Phases.ATACAR],()=>{
             if(this.warMatch.getCurrentPlayer().ia){
                 // alert("IA Jogando")
                 this.warMatch.getCurrentPlayer().attack()
+                if(this.warMatch.hasConditionToNextPhase()){
+                    eventsCenter.emit("next-phase",this.warMatch.getCurrentPlayer())
+                    this.warMatch.turn.nextPhase()
+                }
             }
         })
 
-        eventsCenter.on(this.warMatch.turn.phasesNames[Phases.FORTIFICAR],(msg: any)=>{
+        eventsCenter.on(this.warMatch.turn.phasesNames[Phases.FORTIFICAR],()=>{
             if(this.warMatch.getCurrentPlayer().ia){
                 // alert("IA Jogando")
                 
                 this.warMatch.getCurrentPlayer().fortify()
                 // this.warMatch.getCurrentPlayer().mobilize()
+                if(this.warMatch.hasConditionToNextPhase()){
+                    eventsCenter.emit("next-phase",this.warMatch.getCurrentPlayer())
+                    this.warMatch.turn.nextPhase()
+                }
             }
         })
 
@@ -159,12 +171,12 @@ export class MainGameScene extends Phaser.Scene {
             {id: 6,name: "Edu",ia: true,color: 'pink'}
         ]
 
-        // this.scene.run("InitGameScene")
+        this.scene.run("InitGameScene")
         // eventsCenter.emit('init', players);
 
-        if(this.warMatch.init(players)){
-            this.scene.run("ShowUIScene",{warMatch: this.warMatch})
-        }
+        // if(this.warMatch.init(players)){
+        //     this.scene.run("ShowUIScene",{warMatch: this.warMatch})
+        // }
         
     }
 

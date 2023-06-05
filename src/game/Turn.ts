@@ -57,7 +57,7 @@ export class Turn{
             this.nextTurn();
         }
         this.currentPhase %= this.phasesNames.length
-        eventsCenter.emit(this.getCurrentPhaseName(), this.getCurrentPhaseName())
+        eventsCenter.emit(this.getCurrentPhaseName())
     }
 
     nextTurn(){

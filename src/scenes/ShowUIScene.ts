@@ -107,8 +107,6 @@ export default class ShowUIScene extends Phaser.Scene {
                 let playerCardsToExchange = this.cards.filter(c=>c.isSelected).map(c=>c.territory)
                 this.warMatch.board.exchangeCards(currentPlayer, playerCardsToExchange )
                 this.updateArmies()
-                // this.displayMessage.destroy()
-                // this.displayPhase.destroy()
                 this.refresh()
             }
         })

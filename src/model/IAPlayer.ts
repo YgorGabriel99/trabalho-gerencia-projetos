@@ -17,6 +17,13 @@ export default class IaPlayer extends GamePlayer{
 
     cardExchange(){
         // alert("IA trocando cartas")
+        let possibleExchages:Territory[][] = this.warMatch.board.checkPossibleExchanges(this.hand)
+        if(possibleExchages.length > 0){
+            // this.warMatch.board.exchangeCards(currentPlayer, playerCardsToExchange)
+            let index = Math.round(Math.random() * (possibleExchages.length-1))
+            this.warMatch.board.exchangeCards(this,possibleExchages[index])
+        }
+        
         //Analisar situação
         
         //Tomar decisão
@@ -25,7 +32,7 @@ export default class IaPlayer extends GamePlayer{
 
     mobilize(){
         // alert("IA mobilizando")
-        //Mobilizando de formaaleatória
+        //Mobilizando de forma aleatória
         Object.keys(this.placeble).forEach(place =>{
             let territories = this.warMatch.board.getTerritoriesByContinent(place, this)
             while(this.placeble[place] > 0){
@@ -78,12 +85,12 @@ export default class IaPlayer extends GamePlayer{
                 this.warMatch.board.checkFortifyCondition(
                     highlightedTerritories[index], this
                 )
-                console.log(highlightedTerritories[index])
             }
             // territory.unselect()
             territory.unHighlightOwnedNeighbors(this.warMatch.board.territories)
             this.warMatch.board.clearBoard()
         })
+
         this.warMatch.board.clearBoard()
 
         //Analisar situação

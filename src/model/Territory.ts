@@ -49,11 +49,15 @@ export class Territory extends Phaser.GameObjects.Container {
     }
 
     hoverIn(){
-        this.spriteTerritory.setAlpha(0.4)
+        if(!this.isHighlighted){
+            this.spriteTerritory.setAlpha(0.4)
+        }
     }
 
     hoverOut(){
-        this.updateTint();
+        if(!this.isHighlighted){
+            this.updateTint();
+        }
     }
 
     mobilize(continents) {
@@ -152,7 +156,7 @@ export class Territory extends Phaser.GameObjects.Container {
     placeArmies(quantity: number){
         // console.log(typeof(this.armies), typeof(quantity))
         this.armies += quantity;
-        console.log(this.name, this.armies)
+        
         // this.updateText();
     }
 
@@ -161,7 +165,7 @@ export class Territory extends Phaser.GameObjects.Container {
         if(this.armies > quantity){
             let newQuantity = this.armies - quantity
             this.armies = newQuantity;
-            console.log(this.name, this.armies)
+            
             // this.updateText();
         }
     }

@@ -73,6 +73,10 @@ export class Board {
     }
 
     drawCard(player: GamePlayer) {
+        console.log(this.deck)
+        if(this.deck.length === 0) {
+            this.reshuffleDeck()
+        }
         player.hand.push(this.deck.pop())
         player.gainedTerritory = false
     }
@@ -148,7 +152,24 @@ export class Board {
             return true
         }
         return false
-    }    
+    } 
+
+    checkPossibleExchanges(cards: Territory[]){
+        let result:Territory[][] = []
+        if(cards.length < 3){
+            return result;
+        }
+        for(let i = 0; i < cards.length; i++){
+            for(let j = i + 1; j < cards.length;j++){
+                for(let k = j + 1; k < cards.length; k++){
+                    if(this.checkExchangeCondition([cards[i], cards[j], cards[k]])){
+                        result.push([cards[i], cards[j], cards[k]]);
+                    }
+                }
+            }
+        }
+        return result;
+    }
 
     dropCards(player: GamePlayer, cards: Territory[]){
         cards.forEach(card => this.discard.push(card.id));
@@ -288,15 +309,11 @@ export class Board {
     checkFortifyCondition(territory: Territory, player: GamePlayer | undefined) {
         
         if(territory.isHighlighted){
-            console.log("highlighted")
             let origin = this.getSelected()
-            console.log("Fortify condition:", origin, territory)
-            console.log(origin.name, territory?.name)
             this.fortify(origin, territory)
             eventsCenter.emit("clear-board")
             eventsCenter.emit("check-victory", {acao: Phases.FORTIFICAR})
         }else if(territory.owner?.id === player?.id){
-            console.log("owned")
             if(territory.armies === 1){
                 return
             }
@@ -323,7 +340,6 @@ export class Board {
         Object.keys(this.continents).forEach(key => {
             if(this.hasTotality(player, key)){
                 player?.setPlaceble(this.continents[key].slug, this.continents[key].totality)
-                console.log(player?.placeble)
             }
         })
     }
