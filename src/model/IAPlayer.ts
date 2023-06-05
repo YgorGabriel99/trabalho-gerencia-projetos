@@ -32,6 +32,7 @@ export default class IaPlayer extends GamePlayer{
                 let index = Math.round(Math.random() * (territories.length-1))
                 let territory = territories[index]
                 territory.mobilize(this.warMatch.board.continents)
+                console
             }
         })
         
@@ -43,9 +44,8 @@ export default class IaPlayer extends GamePlayer{
 
     attack(){
         // alert("IA atacando")
-        //Analisar situação
-        let attackerTerritories = this.warMatch.board.getPlayerTerritoriesGratherThanOne(this)
-        // let defenderTerritories = this.warMatch.board.getBordersWithOponent(this)
+        // Aleatório
+        let attackerTerritories = this.warMatch.board.getPlayerTerritoriesByArmiesNumber(this,1)
         attackerTerritories.forEach(attacker =>{
             attacker.highlightNeighbours(this.warMatch.board.territories)
             while(this.warMatch.board.hasHighlightedTerritory(attacker) && attacker.armies > 1){
@@ -58,12 +58,34 @@ export default class IaPlayer extends GamePlayer{
             }
             this.warMatch.board.clearBoard()
         })
+        //Analisar situação
+        
         
         //Tomar decisão
     }
 
     fortify(){
         // alert("IA fortificando")
+        //Aleatório
+        let outnumberedTerritories = this.warMatch.board.getPlayerTerritoriesByArmiesNumber(this,1)
+        // let withOneTerritories = this.warMatch.board.getPlayerTerritoriesByArmiesNumber(this,1)
+        outnumberedTerritories.forEach(territory =>{
+            territory.highlightOwnedNeighbors(this.warMatch.board.territories)
+            let highlightedTerritories = this.warMatch.board.getHighlighted()
+            let index = Math.round(Math.random() * (highlightedTerritories.length-1))
+            territory.select()
+            if(highlightedTerritories[index]){
+                this.warMatch.board.checkFortifyCondition(
+                    highlightedTerritories[index], this
+                )
+                console.log(highlightedTerritories[index])
+            }
+            // territory.unselect()
+            territory.unHighlightOwnedNeighbors(this.warMatch.board.territories)
+            this.warMatch.board.clearBoard()
+        })
+        this.warMatch.board.clearBoard()
+
         //Analisar situação
 
         //Tomar decisão

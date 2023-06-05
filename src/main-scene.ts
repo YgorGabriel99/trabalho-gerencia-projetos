@@ -92,6 +92,7 @@ export class MainGameScene extends Phaser.Scene {
         eventsCenter.on(this.warMatch.turn.phasesNames[Phases.FORTIFICAR],(msg: any)=>{
             if(this.warMatch.getCurrentPlayer().ia){
                 // alert("IA Jogando")
+                
                 this.warMatch.getCurrentPlayer().fortify()
                 // this.warMatch.getCurrentPlayer().mobilize()
             }
@@ -133,6 +134,10 @@ export class MainGameScene extends Phaser.Scene {
             }
         })
 
+        eventsCenter.on("clear-board", ()=>{
+            this.warMatch.board.clearBoard()
+        })
+
         eventsCenter.on("check-victory", (data)=>{
             Objective.checkVictoryCondition(this.warMatch, data)
         })
@@ -148,10 +153,10 @@ export class MainGameScene extends Phaser.Scene {
         let players = [
             {id: 1, name: 'Tiago', ia: false, color: 'black'},
             {id: 2, name: 'Paulo', ia: true, color: 'blue'},
-            {id: 3, name: 'Rafa', ia: false, color: 'red'},
-            // {id: 4,name: "Ygor",ia: false,color: 'green'},
-            // {id: 5,name: "Thali",ia: false,color: 'yellow'},
-            // {id: 6,name: "Edu",ia: false,color: 'pink'}
+            {id: 3, name: 'Rafa', ia: true, color: 'red'},
+            {id: 4,name: "Ygor",ia: true,color: 'green'},
+            {id: 5,name: "Thali",ia: true,color: 'yellow'},
+            {id: 6,name: "Edu",ia: true,color: 'pink'}
         ]
 
         // this.scene.run("InitGameScene")

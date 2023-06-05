@@ -286,15 +286,21 @@ export class Board {
     }
 
     checkFortifyCondition(territory: Territory, player: GamePlayer | undefined) {
+        
         if(territory.isHighlighted){
+            console.log("highlighted")
             let origin = this.getSelected()
+            console.log("Fortify condition:", origin, territory)
+            console.log(origin.name, territory?.name)
             this.fortify(origin, territory)
+            eventsCenter.emit("clear-board")
             eventsCenter.emit("check-victory", {acao: Phases.FORTIFICAR})
         }else if(territory.owner?.id === player?.id){
+            console.log("owned")
             if(territory.armies === 1){
                 return
             }
-            this.clearBoard()
+            // this.clearBoard()
             territory.select()
             territory.highlightOwnedNeighbors(this.territories)
         }else if(this.hasSelectedTerritory()){
@@ -306,7 +312,8 @@ export class Board {
         if(origin.armies > 1){
             origin.unplaceArmies(1);
             destiny.placeArmies(1);
-            this.clearBoard();
+            // this.clearBoard();
+            eventsCenter.emit("clear-board")
         }else{
             alert("Movimento inválido")
         }
@@ -371,8 +378,8 @@ export class Board {
         // console.log(result)        
     }
     
-    getPlayerTerritoriesGratherThanOne(player:GamePlayer) {
-        return this.getPlayerTerritories(player).filter(territory => territory.armies > 1)
+    getPlayerTerritoriesByArmiesNumber(player:GamePlayer, number:number) {
+        return this.getPlayerTerritories(player).filter(territory => territory.armies > number)
     }
 
 }
