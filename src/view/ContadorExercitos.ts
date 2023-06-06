@@ -20,7 +20,6 @@ export default class ContadorExercitos extends Phaser.GameObjects.Container {
         let spriteFundoBranco = new Phaser.GameObjects.Sprite(scene, 0 ,0, fundo).setOrigin(0).setAlpha(0.5);
         let spriteTipoUsario;
       
-       console.log(player.totalTerritories, player.totalArmies);
         if(player.ia == 'true'){
             spriteTipoUsario = new Phaser.GameObjects.Sprite(scene, 130,15, 'computer').setOrigin(0);
         }else{
@@ -28,7 +27,6 @@ export default class ContadorExercitos extends Phaser.GameObjects.Container {
         }
         
         spriteTipoUsario.setTintFill(player.color)
-        console.log(scene,x,y,fundo)
         super(scene,x,y ,[spriteFundoBranco,spriteTipoUsario,textName, textTerritorios, textExercito]);
         
         spriteFundoBranco.setInteractive()

@@ -28,11 +28,9 @@ export default class ShowUIScene extends Phaser.Scene {
     init(data: { warMatch: WarMatch; }){
         let {warMatch} = data;
         this.warMatch = warMatch;
-        console.log(this);
     }
     nextPhase(){
         this.warMatch.turn.nextPhase();
-        console.log(this.warMatch.turn.getCurrentPhaseName());
         eventsCenter.emit("next-phase",this.warMatch.getCurrentPlayer());
         this.refresh();
 
@@ -65,7 +63,6 @@ export default class ShowUIScene extends Phaser.Scene {
                 this.contadores[this.contadores.length -1].highlight()
             }
             count++;
-            console.log(this)
         })
 
       

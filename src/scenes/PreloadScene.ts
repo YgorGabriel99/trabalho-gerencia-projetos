@@ -33,9 +33,20 @@ export default class PreloadScene extends Phaser.Scene{
         this.load.image('retangulo_branco', 'assets/images/Retangulo_branco.png');
         this.load.image('pessoa', 'assets/images/pessoa.png');
         this.load.image('linha_vertical', 'assets/images/linha_vertical.png');
+        this.load.image('localizador', 'assets/images/localizador.png');
+        this.load.image('fundo_inicial', 'assets/images/fundo_inicial.png');
+        this.load.image('war', 'assets/images/war.png');
+        this.load.image('tanque_guerra', 'assets/images/tanque-de-guerra.png');
+        this.load.image('botao_jogar', 'assets/images/botao_jogar.png');
+        this.load.image('botao_manual', 'assets/images/botao_manual.png');
+        this.load.image('botao_comecar', 'assets/images/botao_comecar.png');
+        this.load.image('botao_x', 'assets/images/botao_x.png');
+        this.load.image('botao_voltar', 'assets/images/botao_voltar.png');
+        this.load.image('player_container', 'assets/images/player_container.png');
+
     }
 
     create(){
-        this.scene.start('MainGameScene')
+        this.scene.start('FundoScene')
     }
 }
