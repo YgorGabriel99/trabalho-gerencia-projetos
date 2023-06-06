@@ -5,6 +5,7 @@ import { Player } from "../model/Player";
 import StatusJogador from "../view/StatusJogador";
 import ObjetivoJogador from "../view/ObjetivoJogador";
 import IconeCarta from "../view/IconeCarta";
+import { playerCOLORS } from "../model/GamePlayer";
 export default class ShowUIScene extends Phaser.Scene {
     public warMatch: WarMatch;
     public isOpen: boolean = false;
@@ -13,8 +14,8 @@ export default class ShowUIScene extends Phaser.Scene {
     finishPhaseButton: Phaser.GameObjects.Text;
     displayPhase: Phaser.GameObjects.Text;
     displayMessage: Phaser.GameObjects.Text;
-    items: ContadorExercitos;
-    items2: ContadorExercitos;
+    contadores: ContadorExercitos[]=[];
+    statusJogador: ContadorExercitos;
     objetivo: any;
     iconCarta: any;
 
@@ -29,45 +30,62 @@ export default class ShowUIScene extends Phaser.Scene {
         this.warMatch = warMatch;
         console.log(this);
     }
+    nextPhase(){
+        this.warMatch.turn.nextPhase();
+        console.log(this.warMatch.turn.getCurrentPhaseName());
+        eventsCenter.emit("next-phase",this.warMatch.getCurrentPlayer());
+        this.refresh();
 
-    create(){
-        
+    }
+
+    destroy(){
+        if(this.contadores.length>0){
+            this.contadores.forEach(contador=>contador.destroy())
+        }
+        if(this.statusJogador){
+            this.statusJogador.destroy();
+        }
+    }
+
+    refresh(){
+        this.destroy();
         let count = 0;
-        this.warMatch.players.forEach(player =>{
+        this.warMatch.turn.playersOrders.forEach(playerId =>{
+            let player = this.warMatch.getPlayerById(playerId)
             this.warMatch.setPlayerTotalArmies(player)
             this.warMatch.setPlayerTotalTerritories(player)
-            this.items = new ContadorExercitos({
+            this.contadores.push(new ContadorExercitos({
                 scene:this,
                 x: 0,
                 y: 50 + (90*count),
                 fundo: 'retangulo_arredondado',
                 player: player,
-            });
+            }));
+            if(player === this.warMatch.getCurrentPlayer()){
+                this.contadores[this.contadores.length -1].highlight()
+            }
             count++;
             console.log(this)
         })
 
-        count = 0;
-        // this.warMatch.players.forEach(player =>{
-        //     this.warMatch.setPlayerTotalArmies(player)
-        //     this.warMatch.setPlayerTotalTerritories(player)
-            this.items2 = new StatusJogador({
-                scene:this,
-                x: 250,
-                y: 500,
-                fundo: 'barra_azul',
-                // player: player,
-            });
-            // count++;
-        //     console.log(this)
-        // })
+      
+       
+        this.statusJogador = new StatusJogador({
+            scene:this,
+            x: 250,
+            y: 500,
+            fundo: 'barra_azul',
+            warMatch: this.warMatch,
+                
+        });
+     
        
         this.objetivo = new ObjetivoJogador({
             scene:this,
             x: 250,
             y: 500,
             fundo: 'ellipse',
-            // player: player,
+
         });
 
         this.iconCarta = new IconeCarta({
@@ -75,10 +93,21 @@ export default class ShowUIScene extends Phaser.Scene {
             x: 250,
             y: 500,
             fundo: 'carta',
-            // player: player,
+          
         });
-        
 
+    }
+
+    updateArmies(){
+        let placedArmies = this.warMatch.turn.getCurrentPlayer(this.warMatch.players)?.placed["all"]
+        let placebleArmies = this.warMatch.turn.getCurrentPlayer(this.warMatch.players)?.placeble["all"]
+        this.displayMessage.setText(
+            `Exércitos Disponíveis: ${placebleArmies} Exércitos alocados: ${placedArmies}`
+        )
+    }
+
+    create(){
+        this.refresh();
 
     }
 }

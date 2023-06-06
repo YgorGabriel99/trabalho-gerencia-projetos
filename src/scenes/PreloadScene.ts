@@ -21,7 +21,7 @@ export default class PreloadScene extends Phaser.Scene{
         
         this.load.image('barra_azul', 'assets/images/icon_retangulo_azul.png');
         this.load.image('ellipse', 'assets/images/ellipse.png');
-        this.load.image('carta', 'assets/images/icon_cartas.png');
+        this.load.image('carta', 'assets/images/cartas-de-jogar.png');
         this.load.image('computer', 'assets/images/icon_computer.png');
         this.load.image('musica', 'assets/images/icon_musica.png');
         this.load.image('objetivo', 'assets/images/icon_objetivo.png');
@@ -32,6 +32,7 @@ export default class PreloadScene extends Phaser.Scene{
         this.load.image('retangulo_arredondado', 'assets/images/retangulo_arredondado.png');
         this.load.image('retangulo_branco', 'assets/images/Retangulo_branco.png');
         this.load.image('pessoa', 'assets/images/pessoa.png');
+        this.load.image('linha_vertical', 'assets/images/linha_vertical.png');
     }
 
     create(){

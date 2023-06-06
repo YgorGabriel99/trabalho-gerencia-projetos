@@ -8,17 +8,17 @@ export default class ObjetivoJogador extends Phaser.GameObjects.Container {
 
     constructor(data: { scene: any; x: number; y: number; fundo: any}) {
         let { scene, x,y,fundo} = data;
-        let spriteObjetivo = new Phaser.GameObjects.Sprite(scene, 780,10, 'ellipse').setOrigin(0);
-        let spriteIconoBjetivo = new Phaser.GameObjects.Sprite(scene, 800,25, 'objetivo').setOrigin(0);
-        let sprite1 = new Phaser.GameObjects.Sprite(scene, 820,25, 'objetivo').setOrigin(0);
+        let spriteObjetivo = new Phaser.GameObjects.Sprite(scene, 500,10, 'ellipse').setOrigin(0);
+        let spriteIconBjetivo = new Phaser.GameObjects.Sprite(scene, 520,25, 'objetivo').setOrigin(0);
+        
        
         
         spriteObjetivo.setInteractive()
 
-        super(scene,x,y ,[spriteObjetivo,spriteIconoBjetivo]);
+        super(scene,x,y ,[spriteObjetivo,spriteIconBjetivo]);
         spriteObjetivo.on("pointerover", (pointer, objeto)=>{
             spriteObjetivo.on("pointerdown", (pointer, objeto)=>{
-                super(scene,x,y ,[spriteObjetivo,spriteIconoBjetivo,sprite1]);
+                super(scene,x,y ,[spriteObjetivo,spriteIconBjetivo]);
             })
             spriteObjetivo.setAlpha(0.7);
             

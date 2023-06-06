@@ -8,11 +8,13 @@ export default class IconeCarta extends Phaser.GameObjects.Container {
 
     constructor(data: { scene: any; x: number; y: number; fundo: any}) {
         let { scene, x,y,fundo} = data;
-        let spriteCarta = new Phaser.GameObjects.Sprite(scene, 920, 30, 'carta').setOrigin(0);
+        let spriteElipseCarta = new Phaser.GameObjects.Sprite(scene, 640,10, 'ellipse').setOrigin(0);
+        let spriteCarta = new Phaser.GameObjects.Sprite(scene, 670, 30, 'carta').setOrigin(0);
+        
       
         spriteCarta.setInteractive()
 
-        super(scene,x,y ,[spriteCarta]);
+        super(scene,x,y ,[spriteElipseCarta,spriteCarta]);
         spriteCarta.on("pointerover", (pointer, objeto)=>{
             spriteCarta.on("pointerdown", (pointer, objeto)=>{
                 //evento do click
