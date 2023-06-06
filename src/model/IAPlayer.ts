@@ -26,6 +26,85 @@ export default class IaPlayer extends GamePlayer{
         
         //Analisar situação
         
+        /*const possibleExchanges: Territory[][] = this.warMatch.board.checkPossibleExchanges(this.hand);
+            
+        if (possibleExchanges.length > 0) {
+            // Análise da situação e tomada de decisão
+             const bestExchange: Territory[] = this.analyzeSituation(possibleExchanges);
+                
+            if (bestExchange) 
+                 this.warMatch.board.exchangeCards(this, bestExchange);
+            
+         }
+
+        }    
+        analyzeSituation(possibleExchanges: Territory[][]): Territory[] | null {
+            let bestExchange: Territory[] | null = null;
+            let bestExchangeScore = 0;
+        
+            // Percorrer todas as combinações de trocas possíveis
+            for (const exchange of possibleExchanges) {
+            // Realizar uma análise da qualidade da troca
+            const exchangeScore = this.evaluateExchange(exchange);
+        
+            // Comparar o score com o melhor score atual
+            if (exchangeScore > bestExchangeScore) {
+                bestExchange = exchange;
+                bestExchangeScore = exchangeScore;
+            }
+            }
+        
+            return bestExchange;
+        }
+            
+        evaluateExchange(exchange: Territory[]): number {
+            let exchangeValue = 0;
+          
+            // Avaliar o valor estratégico de cada carta na troca
+            for (const territory of exchange) {
+              const cardValue = this.evaluateCard(territory.card);
+              exchangeValue += cardValue;
+            }
+          
+            // Verificar se a troca forma um conjunto especial
+            if (this.isSpecialSet(exchange)) {
+              // Atribuir um valor adicional para conjuntos especiais
+              exchangeValue += 100;
+            }
+          
+            // Considerar o estado atual do jogo e ajustar o valor da troca conforme necessário
+            const gameStatus = this.evaluateGameStatus();
+            if (gameStatus === 'desvantagem') {
+              exchangeValue += 50; // Valor adicional para trocas que ajudem a compensar a desvantagem
+            } else if (gameStatus === 'vitória eminente') {
+              exchangeValue += 100; // Valor adicional para trocas que aproximem da vitória
+            }
+          
+            return exchangeValue;
+          }
+          
+        evaluateCard(card: Card): number {
+            // Atribuir valores estratégicos para cada tipo de carta
+            // Exemplo:
+            if (card === 'territory') {
+                return 10;
+            } else if (card === 'bonus') {
+                return 5;
+            } else if (card === 'special') {
+                return 20;
+            }
+            return 0;
+            }
+            
+       
+        
+        evaluateGameStatus(): 'desvantagem' | 'vitória eminente' | 'equilíbrio' {
+            // Avaliar o estado atual do jogo e retornar uma indicação do status
+            // Exemplo: Verificar se a IA está em desvantagem em termos de territórios ou tropas
+            // ou se a IA está perto de alcançar uma condição de vitória
+            // Implemente a lógica específica do jogo aqui
+            return 'equilíbrio';
+        }*/
         //Tomar decisão
 
     }
@@ -44,7 +123,44 @@ export default class IaPlayer extends GamePlayer{
         })
         
         //Analisar situação
-
+    
+        /*const territories = this.warMatch.board.getOwnedTerritories(this); // Obtém todos os territórios controlados pela IA
+        const prioritizedTerritories = [];
+        
+        // Analisar cada território
+        for (const territory of territories) {
+            let priority = 0;
+        
+            // Avaliar a prioridade de mobilização com base nos critérios estratégicos
+            // Exemplo:
+            if (territory.isBorderTerritory()) {
+            priority += 3; // Prioridade alta para territórios de fronteira
+            }
+        
+            if (territory.isInDanger()) {
+            priority += 2; // Prioridade alta para territórios em perigo de ataque
+            }
+        
+            // Adicione outros critérios estratégicos relevantes aqui
+        
+            if (priority > 0) {
+            prioritizedTerritories.push({ territory, priority });
+            }
+        }
+        
+        // Ordenar os territórios com base nas prioridades
+        prioritizedTerritories.sort((a, b) => b.priority - a.priority);
+        
+        // Mobilizar as tropas nos territórios prioritários
+        for (const { territory } of prioritizedTerritories) {
+            while (this.placeble[territory.continent] > 0) {
+            territory.mobilize(this.warMatch.board.continents);
+            this.placeble[territory.continent] -= 1;
+            
+        
+        
+        // Tomar decisões adicionais, se necessário
+        */ 
         //Tomar decisão
 
     }
@@ -66,9 +182,55 @@ export default class IaPlayer extends GamePlayer{
             this.warMatch.board.clearBoard()
         })
         //Analisar situação
-        
+        /*
+        attack() {
+            let attackerTerritories = this.warMatch.board.getPlayerTerritoriesByArmiesNumber(this, 1);attackerTerritories.forEach(attacker => {
+                
+                // Analisar situação
+                let targetTerritories = attacker.getNeighbouringEnemyTerritories(); // Obter territórios vizinhos inimigos
+                let prioritizedTargets = this.prioritizeTargets(targetTerritories); // Priorizar alvos estratégicos
+
+                // Tomar decisão de ataque
+                if (prioritizedTargets.length > 0) {
+                let selectedTarget = this.chooseAttackTarget(prioritizedTargets); // Escolher alvo de ataque
+                this.warMatch.board.checkAttackCondition(selectedTarget, attacker);
+                }
+
+            this.warMatch.board.clearBoard();
+            });
+        }
+        */
         
         //Tomar decisão
+        /*
+            prioritizeTargets(targets: Territory[]): Territory[] {
+            // Implemente sua lógica para priorizar alvos estratégicos
+            // Considere critérios como territórios-chave, territórios de jogadores mais fortes, etc.
+            // Retorne uma nova lista com os alvos priorizados
+            }
+
+            chooseAttackTarget(targets: Territory[]): Territory {
+            // Implemente sua lógica para escolher um alvo de ataque
+            // Considere fatores como a força relativa do território atacante e dos alvos, o risco envolvido, etc.
+            // Retorne o alvo escolhido para o ataque
+            }
+
+            getNeighbouringEnemyTerritories(): Territory[] {
+            let enemyTerritories: Territory[] = [];
+            let ownedTerritories = this.warMatch.board.getPlayerTerritories(this);
+
+            ownedTerritories.forEach(territory => {
+                let neighbouringTerritories = territory.getNeighbours();
+                neighbouringTerritories.forEach(neighbour => {
+                if (neighbour.owner !== this) {
+                    enemyTerritories.push(neighbour);
+                }
+                });
+            });
+
+            return enemyTerritories;
+            }
+        */
     }
 
     fortify(){
