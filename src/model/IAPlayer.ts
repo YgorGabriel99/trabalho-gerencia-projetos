@@ -85,15 +85,7 @@ export default class IaPlayer extends GamePlayer{
           
         evaluateCard(card: Card): number {
             // Atribuir valores estratégicos para cada tipo de carta
-            // Exemplo:
-            if (card === 'territory') {
-                return 10;
-            } else if (card === 'bonus') {
-                return 5;
-            } else if (card === 'special') {
-                return 20;
-            }
-            return 0;
+            
             }
             
        
@@ -102,7 +94,6 @@ export default class IaPlayer extends GamePlayer{
             // Avaliar o estado atual do jogo e retornar uma indicação do status
             // Exemplo: Verificar se a IA está em desvantagem em termos de territórios ou tropas
             // ou se a IA está perto de alcançar uma condição de vitória
-            // Implemente a lógica específica do jogo aqui
             return 'equilíbrio';
         }*/
         //Tomar decisão
