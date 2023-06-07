@@ -26,11 +26,11 @@ export default class IaPlayer extends GamePlayer{
         
         //Analisar situação
         
-        /*const possibleExchanges: Territory[][] = this.warMatch.board.checkPossibleExchanges(this.hand);
+        /*let possibleExchanges: Territory[][] = this.warMatch.board.checkPossibleExchanges(this.hand);
             
         if (possibleExchanges.length > 0) {
             // Análise da situação e tomada de decisão
-             const bestExchange: Territory[] = this.analyzeSituation(possibleExchanges);
+             let bestExchange: Territory[] = this.analyzeSituation(possibleExchanges);
                 
             if (bestExchange) 
                  this.warMatch.board.exchangeCards(this, bestExchange);
@@ -43,9 +43,9 @@ export default class IaPlayer extends GamePlayer{
             let bestExchangeScore = 0;
         
             // Percorrer todas as combinações de trocas possíveis
-            for (const exchange of possibleExchanges) {
+            for (let exchange of possibleExchanges) {
             // Realizar uma análise da qualidade da troca
-            const exchangeScore = this.evaluateExchange(exchange);
+            let exchangeScore = this.evaluateExchange(exchange);
         
             // Comparar o score com o melhor score atual
             if (exchangeScore > bestExchangeScore) {
@@ -61,8 +61,8 @@ export default class IaPlayer extends GamePlayer{
             let exchangeValue = 0;
           
             // Avaliar o valor estratégico de cada carta na troca
-            for (const territory of exchange) {
-              const cardValue = this.evaluateCard(territory.card);
+            for (let territory of exchange) {
+              let cardValue = this.evaluateCard(territory.card);
               exchangeValue += cardValue;
             }
           
@@ -73,7 +73,7 @@ export default class IaPlayer extends GamePlayer{
             }
           
             // Considerar o estado atual do jogo e ajustar o valor da troca conforme necessário
-            const gameStatus = this.evaluateGameStatus();
+            let gameStatus = this.evaluateGameStatus();
             if (gameStatus === 'desvantagem') {
               exchangeValue += 50; // Valor adicional para trocas que ajudem a compensar a desvantagem
             } else if (gameStatus === 'vitória eminente') {
@@ -124,11 +124,11 @@ export default class IaPlayer extends GamePlayer{
         
         //Analisar situação
     
-        /*const territories = this.warMatch.board.getOwnedTerritories(this); // Obtém todos os territórios controlados pela IA
-        const prioritizedTerritories = [];
+        /*let territories = this.warMatch.board.getOwnedTerritories(this); // Obtém todos os territórios controlados pela IA
+        let prioritizedTerritories = [];
         
         // Analisar cada território
-        for (const territory of territories) {
+        for (let territory of territories) {
             let priority = 0;
         
             // Avaliar a prioridade de mobilização com base nos critérios estratégicos
@@ -152,7 +152,7 @@ export default class IaPlayer extends GamePlayer{
         prioritizedTerritories.sort((a, b) => b.priority - a.priority);
         
         // Mobilizar as tropas nos territórios prioritários
-        for (const { territory } of prioritizedTerritories) {
+        for (let { territory } of prioritizedTerritories) {
             while (this.placeble[territory.continent] > 0) {
             territory.mobilize(this.warMatch.board.continents);
             this.placeble[territory.continent] -= 1;
