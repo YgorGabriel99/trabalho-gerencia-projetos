@@ -1,7 +1,8 @@
 import { WarMatch } from "../game/WarMatch";
 import { GamePlayer } from "./GamePlayer";
-import PlayerType from "./Player";
+import PlayerType, { Player } from "./Player";
 import { Territory } from "./Territory";
+import { Board } from "./Boards";
 
 export default class IaPlayer extends GamePlayer{
 
@@ -17,97 +18,81 @@ export default class IaPlayer extends GamePlayer{
 
     cardExchange(){
         // alert("IA trocando cartas")
-        let possibleExchages:Territory[][] = this.warMatch.board.checkPossibleExchanges(this.hand)
-        if(possibleExchages.length > 0){
+        let possibleExchanges:Territory[][] = this.warMatch.board.checkPossibleExchanges(this.hand)
+        if(possibleExchanges.length > 0){
             // this.warMatch.board.exchangeCards(currentPlayer, playerCardsToExchange)
-            let index = Math.round(Math.random() * (possibleExchages.length-1))
-            this.warMatch.board.exchangeCards(this,possibleExchages[index])
+            let index = Math.round(Math.random() * (possibleExchanges.length-1))
+            this.warMatch.board.exchangeCards(this,possibleExchanges[index])
         }
         
-        //Analisar situação
-        
-        /*let possibleExchanges: Territory[][] = this.warMatch.board.checkPossibleExchanges(this.hand);
+        // início da análise de troca
+        let possibleExchanges: Territory[][] = this.warMatch.board.checkPossibleExchanges(this.hand)
             
         if (possibleExchanges.length > 0) {
             // Análise da situação e tomada de decisão
-             let bestExchange: Territory[] = this.analyzeSituation(possibleExchanges);
+            let bestExchange: Territory[][] = this.analyzeSituation(possibleExchanges);
                 
             if (bestExchange) 
-                 this.warMatch.board.exchangeCards(this, bestExchange);
-            
-         }
+                this.warMatch.board.exchangeCards(this, bestExchange);
+            else{
+                let index = Math.round(Math.random() * (possibleExchanges.length-1));
+                this.warMatch.board.exchangeCards(this,possibleExchanges[index]);
+            }
+        }
 
-        }    
-        analyzeSituation(possibleExchanges: Territory[][]): Territory[] | null {
-            let bestExchange: Territory[] | null = null;
-            let bestExchangeScore = 0;
-        
-            // Percorrer todas as combinações de trocas possíveis
-            for (let exchange of possibleExchanges) {
-            // Realizar uma análise da qualidade da troca
-            let exchangeScore = this.evaluateExchange(exchange);
-        
+    }    
+    //Analisar situação 
+    analyzeSituation(possibleExchanges: Territory[][]): Territory[][] | null {
+
+        let bestExchange: Territory[][] | null = null;
+        let bestExchangeScore = 0;
+    
+        // Percorrer todas as combinações de trocas possíveis
+        for (let exchange:Territory[][] of possibleExchanges) {
+             
+             let exchangeScore = this.evaluateExchange(exchange);
+    
             // Comparar o score com o melhor score atual
             if (exchangeScore > bestExchangeScore) {
                 bestExchange = exchange;
                 bestExchangeScore = exchangeScore;
             }
-            }
-        
-            return bestExchange;
         }
-            
-        evaluateExchange(exchange: Territory[]): number {
-            let exchangeValue = 0;
+    
+        return bestExchange;
+    }
+        
+    evaluateExchange(exchange: Territory[][]): number {
+        let exchangeValue = 0;
+        let currentPlayerArmies = this.totalArmies;
+       //ver se faz sentido
+        let enemyArmies =
+
+        // Considerar a relação de forças para ajustar o valor da troca
+        if (currentPlayerArmies > enemyArmies) 
+            // O jogador atual possui mais tropas do que as tropas inimigas
+            exchangeValue += 10; // Valor adicional para incentivar a troca e fortalecer ainda mais o jogador
+         else if (currentPlayerArmies < enemyArmies) 
+            // O jogador atual possui menos tropas do que as tropas inimigas
+            exchangeValue -= 10; // Valor penalizado para desencorajar a troca e priorizar a defesa
+        
+        return exchangeValue;
+    }
           
-            // Avaliar o valor estratégico de cada carta na troca
-            for (let territory of exchange) {
-              let cardValue = this.evaluateCard(territory.card);
-              exchangeValue += cardValue;
-            }
-          
-            // Verificar se a troca forma um conjunto especial
-            if (this.isSpecialSet(exchange)) {
-              // Atribuir um valor adicional para conjuntos especiais
-              exchangeValue += 100;
-            }
-          
-            // Considerar o estado atual do jogo e ajustar o valor da troca conforme necessário
-            let gameStatus = this.evaluateGameStatus();
-            if (gameStatus === 'desvantagem') {
-              exchangeValue += 50; // Valor adicional para trocas que ajudem a compensar a desvantagem
-            } else if (gameStatus === 'vitória eminente') {
-              exchangeValue += 100; // Valor adicional para trocas que aproximem da vitória
-            }
-          
-            return exchangeValue;
-          }
-          
-        evaluateCard(card: Card): number {
-            // Atribuir valores estratégicos para cada tipo de carta
-            // Exemplo:
-            if (card === 'territory') {
-                return 10;
-            } else if (card === 'bonus') {
-                return 5;
-            } else if (card === 'special') {
-                return 20;
-            }
-            return 0;
-            }
+    
             
        
         
-        evaluateGameStatus(): 'desvantagem' | 'vitória eminente' | 'equilíbrio' {
+    evaluateGameStatus(): 'desvantagem' | 'vitória eminente' | 'equilíbrio' {
             // Avaliar o estado atual do jogo e retornar uma indicação do status
             // Exemplo: Verificar se a IA está em desvantagem em termos de territórios ou tropas
             // ou se a IA está perto de alcançar uma condição de vitória
             // Implemente a lógica específica do jogo aqui
             return 'equilíbrio';
-        }*/
+    }
         //Tomar decisão
 
-    }
+    
 
     mobilize(){
         // alert("IA mobilizando")
@@ -121,49 +106,35 @@ export default class IaPlayer extends GamePlayer{
                 console
             }
         })
-        
+    }   
         //Analisar situação
-    
-        /*let territories = this.warMatch.board.getOwnedTerritories(this); // Obtém todos os territórios controlados pela IA
-        let prioritizedTerritories = [];
-        
-        // Analisar cada território
-        for (let territory of territories) {
-            let priority = 0;
-        
-            // Avaliar a prioridade de mobilização com base nos critérios estratégicos
-            // Exemplo:
-            if (territory.isBorderTerritory()) {
-            priority += 3; // Prioridade alta para territórios de fronteira
-            }
-        
-            if (territory.isInDanger()) {
-            priority += 2; // Prioridade alta para territórios em perigo de ataque
-            }
-        
-            // Adicione outros critérios estratégicos relevantes aqui
-        
-            if (priority > 0) {
-            prioritizedTerritories.push({ territory, priority });
-            }
-        }
-        
-        // Ordenar os territórios com base nas prioridades
-        prioritizedTerritories.sort((a, b) => b.priority - a.priority);
-        
-        // Mobilizar as tropas nos territórios prioritários
-        for (let { territory } of prioritizedTerritories) {
-            while (this.placeble[territory.continent] > 0) {
-            territory.mobilize(this.warMatch.board.continents);
-            this.placeble[territory.continent] -= 1;
-            
-        
-        
-        // Tomar decisões adicionais, se necessário
-        */ 
-        //Tomar decisão
+   
+    analiticMobilize(){
 
-    }
+        let aiTerritories = this.Board.getPlayerTerritories(this); // Obtém todos os territórios controlados pela IA
+        aiTerritories.sort((a, b) => b.armies - a.armies);//territórios com maior número de tropas ficam na frente
+    
+        // Analisar cada território
+        aiTerritories.forEach((territory) =>{
+            let neighborTerritories = territory.neighbors;  
+            let maxDanger = 0;
+            let target = null;
+
+            for (let neighbor of neighborTerritories){
+               let danger = 0;
+
+                if(neighbor.owner !== this)
+                  danger = neighbor.armies/territory.armies;    
+
+                if(danger > maxDanger){
+                    maxDanger = danger;
+                    target = neighbor;
+                }
+            }
+       });
+    }   
+        
+    // Tomar decisões adicionais, se necessário
 
     attack(){
         // alert("IA atacando")
@@ -181,6 +152,7 @@ export default class IaPlayer extends GamePlayer{
             }
             this.warMatch.board.clearBoard()
         })
+    }    
         //Analisar situação
         /*
         attack() {
@@ -231,7 +203,7 @@ export default class IaPlayer extends GamePlayer{
             return enemyTerritories;
             }
         */
-    }
+    
 
     fortify(){
         // alert("IA fortificando")
